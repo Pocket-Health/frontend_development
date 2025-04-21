@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final theme = ThemeData(
-  scaffoldBackgroundColor: Color.fromARGB(255, 36, 44, 59),
+  scaffoldBackgroundColor: Color(0xFF242C3B),
   primarySwatch: Colors.blue,
   textTheme: TextTheme(
     titleMedium: TextStyle(

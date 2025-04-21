@@ -12,7 +12,7 @@ class _LoadScreenState extends State<LoadScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.of(context).pushReplacementNamed('/login');
       }
@@ -31,7 +31,7 @@ class _LoadScreenState extends State<LoadScreen> {
                 top: 0,
                 right: 0,
                 child: SvgPicture.asset(
-                  'assets/images/load_screen_up.svg',
+                  'assets/images/load/load_screen_up.svg',
                   width: screenSize.width,
                 ),
               ),
@@ -39,7 +39,7 @@ class _LoadScreenState extends State<LoadScreen> {
                 bottom: 0,
                 left: 0,
                 child: SvgPicture.asset(
-                  'assets/images/load_screen_down.svg',
+                  'assets/images/load/load_screen_down.svg',
                   width: screenSize.width - 40,
                 ),
               ),
