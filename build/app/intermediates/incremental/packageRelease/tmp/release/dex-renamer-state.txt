@@ -1,0 +1,4 @@
+#Tue Apr 22 21:53:52 MSK 2025
+base.0=/Users/nikitamasalkin/Desktop/frontend_development/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

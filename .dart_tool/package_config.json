@@ -68,6 +68,12 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "flutter_platform_widgets",
+      "rootUri": "file:///Users/nikitamasalkin/.pub-cache/hosted/pub.dev/flutter_platform_widgets-8.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
       "name": "flutter_svg",
       "rootUri": "file:///Users/nikitamasalkin/.pub-cache/hosted/pub.dev/flutter_svg-2.0.17",
       "packageUri": "lib/",
@@ -248,7 +254,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-04-21T18:27:42.358141Z",
+  "generated": "2025-04-22T17:47:04.546340Z",
   "generator": "pub",
   "generatorVersion": "3.7.0",
   "flutterRoot": "file:///Users/nikitamasalkin/development/flutter",
