@@ -32,6 +32,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: screenSize.width,
                 ),
               ),
+              Positioned(
+                width: screenSize.width,
+                bottom: 100,
+                child: Center(
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Продолжить без аккаунта',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Center(
                 child: SizedBox(
                   width: screenSize.width * 0.75,
@@ -273,24 +291,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                width: screenSize.width,
-                bottom: 100,
-                child: Center(
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Продолжить без аккаунта',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
