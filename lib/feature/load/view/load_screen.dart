@@ -5,7 +5,7 @@ class LoadScreen extends StatefulWidget {
   const LoadScreen({super.key});
 
   @override
-  _LoadScreenState createState() => _LoadScreenState();
+  State<LoadScreen> createState() => _LoadScreenState();
 }
 
 class _LoadScreenState extends State<LoadScreen> {

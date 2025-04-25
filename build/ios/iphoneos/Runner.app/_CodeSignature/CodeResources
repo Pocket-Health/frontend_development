@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		MLP4uWZ/q5kHc2N+RVeFhvMGnCk=
+		n4WJtj2CfSdQPDSMFo+rLWY7fIw=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,15 +54,15 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		2NUu27KM9uW8SfOiADZoNZizLEQ=
+		oHWJs7BLQ39ax45cOE2SGjj+LuE=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
-		0hZkba0Nqev96+4gvQQIcAHKec4=
+		qMbokgFd4l2qHXIpBFVdacmIYpc=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
-		y+XOL2gVCFmJQVdAGJjice6UhD8=
+		OHAhQ+SNYAvLm/vG5daamC2VBAo=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
-		zPeNtr3j/4ld8CtECnYDVFlfFVQ=
+		5vTJJ5GJVMq8WqtO6CLvYV6SJbk=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NativeAssetsManifest.json</key>
 		<data>
@@ -96,6 +96,10 @@
 		<data>
 		YzgF0d2nRhirltgMPsUmfLswWCY=
 		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/images/registration/registration_screen.svg</key>
+		<data>
+		3X2Z+2v6qoyqOv0agaU4SdVlMz0=
+		</data>
 		<key>Frameworks/App.framework/flutter_assets/fonts/MaterialIcons-Regular.otf</key>
 		<data>
 		/CUoTuPQqqdexfyOT9lpJhV+2MQ=
@@ -106,7 +110,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		NonnLv5sLKGW3wNN0T3Y2QtNSTg=
+		6yl4XQsATwMJqH19T5mzy49GO9U=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -222,11 +226,11 @@
 		</data>
 		<key>Runner.debug.dylib</key>
 		<data>
-		XsWWW6MHxkwnP9ER8h4swvYXitw=
+		LwPocwrAtsBAP7+OD0DMyEOJ5Lc=
 		</data>
 		<key>__preview.dylib</key>
 		<data>
-		qzdOmU1sVZXFZarSesLmzIoSgSA=
+		5SBZQBrk1Zqa/z0/uhey3h6S2Yw=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -309,7 +313,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			z8JizAjyb7FY6QXizg7GoS5WDHQp3A4v/CXzKx3oHAs=
+			ugpuRs7tCI6lKMJ9xcw0soJxku/Z7kEGfIi/dTL3Y4M=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -323,21 +327,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			nhyKGAhsJ7YX3f5jaYg87ZrxXDn8FbIloGihO6KgwUY=
+			ThdLRif/cIJs27yi3Oc4nZHz2fGTDiV6b5bgcud/9nk=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			7svqP25tfiWphvoKQFVJmJwc5SC8D6Rev8RU/HUj7zw=
+			EiSP1HdRhpFFfEUmBxwvcplT3VvdHT8js1Gxn/MKgDg=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			6OHiEkhxI72cyueMM0c+48K/hQeg1CCGliYex+athiU=
+			2+SSPPZq+KT7W3J9ioXqD3oN9KmaUYTdOJB5m8TOPkI=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
@@ -351,7 +355,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			dL2nVXsMXxSjmN8LYL7V8wAC5ikKRDcrEeZNVig3XfE=
+			bMqy4rzLa8fLrzdX9BVbisWAq6qU79Qezgo34dl1AsU=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/NativeAssetsManifest.json</key>
@@ -396,6 +400,13 @@
 			PSX8TZTSMXZYTPnE8iY/Ei9X5Vtjhbtbxjl0FdyFbzs=
 			</data>
 		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/images/registration/registration_screen.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			X5YSAbwKxr1RQTRWnteMcGsNPKv3xQMJLnSygW9738Y=
+			</data>
+		</dict>
 		<key>Frameworks/App.framework/flutter_assets/fonts/MaterialIcons-Regular.otf</key>
 		<dict>
 			<key>hash2</key>
@@ -414,7 +425,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/JBmKyGJcvIn1yDigeR0pNgPIYjJgL77qbpM5oyhBcY=
+			/Df97DqJzwaJgm8YDBuO0aQYs/SLwS3VRGmRLbFDEs4=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -603,14 +614,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			8WYMDU4tBZzf6VUM4wFow1ncVh456hP16gIRp82s1ek=
+			zIfebelKFP+Xly44mbOYU09piH63SKbMYPjUr7DAEew=
 			</data>
 		</dict>
 		<key>__preview.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			NyJV96L/hRZrrGuHbsaB7e3KumwQxGProT4Mu5oBvrw=
+			TBXB+a5F90wiM+ZKA5EwOdEumBEhibY0Cbe2MEEZzqA=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>

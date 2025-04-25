@@ -280,7 +280,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 SizedBox(height: spacing / 2),
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(
+                                      context,
+                                    ).pushNamed('/registration_user');
+                                  },
                                   child: Text(
                                     'Зарегистрироваться',
                                     style: TextTheme.of(context).titleSmall,
