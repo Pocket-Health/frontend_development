@@ -131,7 +131,7 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
                                                     context,
                                                   ).labelMedium,
                                               prefix: SizedBox(
-                                                width: inputFieldWidth / 4.7,
+                                                width: inputFieldWidth / 5.45,
                                               ),
                                               suffixIcon: IconButton(
                                                 icon: Icon(
