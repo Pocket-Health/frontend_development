@@ -34,13 +34,13 @@ class _RegistrationMedicalCardScreenState
       builder: (context) {
         return Dialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: inputFieldWidth - 20,
-              ),
+              constraints: BoxConstraints(maxWidth: inputFieldWidth - 20),
               child: GridView.count(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -48,48 +48,46 @@ class _RegistrationMedicalCardScreenState
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 childAspectRatio: 2.2,
-                children: _bloodTypes.map((type) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedBloodType = type;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: ShapeDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment(-0.05, -1.5),
-                          end: Alignment(0.05, 2.5),
-                          colors: [
-                            Color(0xFF34C8E8),
-                            Color(0xFF4E4AF2),
-                          ],
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        type,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black54,
-                              offset: Offset(0, 0),
-                              blurRadius: 15,
+                children:
+                    _bloodTypes.map((type) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedBloodType = type;
+                          });
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          decoration: ShapeDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment(-0.05, -1.5),
+                              end: Alignment(0.05, 2.5),
+                              colors: [Color(0xFF34C8E8), Color(0xFF4E4AF2)],
                             ),
-                          ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            type,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black54,
+                                  offset: Offset(0, 0),
+                                  blurRadius: 15,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                      );
+                    }).toList(),
               ),
             ),
           ),

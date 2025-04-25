@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/feature/registration/widget/widget.dart';
 
 class RegistrationUserScreen extends StatefulWidget {
   const RegistrationUserScreen({super.key});
@@ -76,55 +77,7 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
                                   style: TextTheme.of(context).titleMedium,
                                 ),
                                 SizedBox(height: spacing / 2),
-                                Container(
-                                  width: inputFieldWidth,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0xFF2C3648),
-                                        blurRadius: 10,
-                                        offset: Offset(-4, -4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Center(
-                                        child: InnerShadow(
-                                          shadows: [
-                                            Shadow(
-                                              color: Color(0xFF191E29),
-                                              blurRadius: 5,
-                                              offset: Offset(0, 0),
-                                            ),
-                                          ],
-                                          child: Container(
-                                            width: inputFieldWidth,
-                                            height: inputFieldWidth / 4.5,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      TextField(
-                                        textAlign: TextAlign.center,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: 'Почта',
-                                          hintStyle:
-                                              TextTheme.of(context).labelMedium,
-                                        ),
-                                        style: TextTheme.of(context).labelSmall,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                InputField('Почта', TextInputType.emailAddress),
                                 SizedBox(height: spacing),
                                 Container(
                                   width: inputFieldWidth,
