@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		n4WJtj2CfSdQPDSMFo+rLWY7fIw=
+		FSA/nCPyMKQ/7WFwPeBxR40jCD8=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,15 +54,15 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		oHWJs7BLQ39ax45cOE2SGjj+LuE=
+		GbiVMVFQtXY4hv0h0VdHbaWTpB0=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
-		qMbokgFd4l2qHXIpBFVdacmIYpc=
+		8QxHn2Resu6hNInsxnrSPGHJJ50=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
-		OHAhQ+SNYAvLm/vG5daamC2VBAo=
+		jMfI7uNMaGY696KO4scCYeeIJt4=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
 		<data>
@@ -96,6 +96,10 @@
 		<data>
 		YzgF0d2nRhirltgMPsUmfLswWCY=
 		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/images/password_recovery/password_recovery_screen.svg</key>
+		<data>
+		5GRBxpOKKfOtNG/R+I3DYEB66Z8=
+		</data>
 		<key>Frameworks/App.framework/flutter_assets/assets/images/registration/registration_screen.svg</key>
 		<data>
 		3X2Z+2v6qoyqOv0agaU4SdVlMz0=
@@ -110,7 +114,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		6yl4XQsATwMJqH19T5mzy49GO9U=
+		VdflkvzPoL5owdbxcQ2PYvQkX8c=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -226,11 +230,11 @@
 		</data>
 		<key>Runner.debug.dylib</key>
 		<data>
-		LwPocwrAtsBAP7+OD0DMyEOJ5Lc=
+		VPY2rlNDBOdqUYQpa6TyJRqFuD4=
 		</data>
 		<key>__preview.dylib</key>
 		<data>
-		5SBZQBrk1Zqa/z0/uhey3h6S2Yw=
+		7b2BqHAGsIYnyT7GKq1WCaOZUcc=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -313,7 +317,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ugpuRs7tCI6lKMJ9xcw0soJxku/Z7kEGfIi/dTL3Y4M=
+			dFiS8Jq5JKo7CYQksU8ZwAwNDN13yRG4Q0q4LhosrOQ=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -327,21 +331,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ThdLRif/cIJs27yi3Oc4nZHz2fGTDiV6b5bgcud/9nk=
+			3ZRmb1xS3sbo665HOpcTb4h42XNJ7uqjI8qU0rRaKYU=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			EiSP1HdRhpFFfEUmBxwvcplT3VvdHT8js1Gxn/MKgDg=
+			r3TrXjw+BCy/pYhLeyQtiVonR+Gno8yIzey4u1eKWUQ=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2+SSPPZq+KT7W3J9ioXqD3oN9KmaUYTdOJB5m8TOPkI=
+			gPJlDK5JJ6/M0H9cxFwJXOPghYtge4tQyfSMiUFFexk=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
@@ -400,6 +404,13 @@
 			PSX8TZTSMXZYTPnE8iY/Ei9X5Vtjhbtbxjl0FdyFbzs=
 			</data>
 		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/images/password_recovery/password_recovery_screen.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			FFqBogY50sQgMkrFPGLkkIVhZ3kZxy7lAsxO8ayq884=
+			</data>
+		</dict>
 		<key>Frameworks/App.framework/flutter_assets/assets/images/registration/registration_screen.svg</key>
 		<dict>
 			<key>hash2</key>
@@ -425,7 +436,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/Df97DqJzwaJgm8YDBuO0aQYs/SLwS3VRGmRLbFDEs4=
+			6aysmdLmX0+i3V8Tb0J0xFQ/jqo065bk/mda8kVMoz4=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -614,14 +625,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zIfebelKFP+Xly44mbOYU09piH63SKbMYPjUr7DAEew=
+			wCCmUxwyB0GKbalbhAnX0jqD5HOMfHcC6m+q9NQyT8M=
 			</data>
 		</dict>
 		<key>__preview.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TBXB+a5F90wiM+ZKA5EwOdEumBEhibY0Cbe2MEEZzqA=
+			GZDO4GHfRvsgVg3hFkCBXcAQR9nS2F/Fs5iVZnAj+mY=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>

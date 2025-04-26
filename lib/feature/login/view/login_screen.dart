@@ -193,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     context,
                                                   ).labelMedium,
                                               prefix: SizedBox(
-                                                width: inputFieldWidth / 4.7,
+                                                width: inputFieldWidth / 5,
                                               ),
                                               suffixIcon: IconButton(
                                                 icon: Icon(
