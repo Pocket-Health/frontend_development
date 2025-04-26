@@ -1,1 +1,0 @@
- /Users/nikitamasalkin/Desktop/frontend_development/.dart_tool/flutter_build/dae7386e96a45dbad99d5523503be9d8/native_assets.json: 
