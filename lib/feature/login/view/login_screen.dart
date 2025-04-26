@@ -193,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     context,
                                                   ).labelMedium,
                                               prefix: SizedBox(
-                                                width: inputFieldWidth / 4.7,
+                                                width: inputFieldWidth / 5,
                                               ),
                                               suffixIcon: IconButton(
                                                 icon: Icon(
@@ -221,7 +221,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 SizedBox(height: spacing / 2),
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(
+                                      context,
+                                    ).pushNamed('/send_code');
+                                  },
                                   child: Text(
                                     'Забыли пароль?',
                                     style: TextTheme.of(context).titleSmall,
