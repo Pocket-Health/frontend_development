@@ -263,7 +263,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ],
                                   ),
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.of(
+                                        context,
+                                      ).pushNamed('/chat');
+                                    },
                                     child: Text(
                                       'Войти',
                                       style: TextStyle(

@@ -59,6 +59,9 @@ flutter:
     - assets/images/login/
     - assets/images/registration/
     - assets/images/password_recovery/
+    - assets/icons/active/
+    - assets/icons/inactive/
+    - assets/images/chat/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
