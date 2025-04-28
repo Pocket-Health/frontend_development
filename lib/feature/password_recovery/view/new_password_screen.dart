@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/feature/CustomPageRoute.dart';
 
 class NewPasswordScreen extends StatefulWidget {
   const NewPasswordScreen({super.key});
@@ -248,7 +249,15 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
                                     ],
                                   ),
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        CustomPageRoute(
+                                          routeName: '/login',
+                                          beginOffset: Offset(1.0, 0.0),
+                                        ),
+                                      );
+                                    },
                                     child: Text(
                                       'Сменить пароль',
                                       style: TextStyle(
@@ -270,9 +279,13 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
                                 SizedBox(height: spacing / 2),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(
+                                    Navigator.push(
                                       context,
-                                    ).pushNamed('/check_code');
+                                      CustomPageRoute(
+                                        routeName: '/check_code',
+                                        beginOffset: Offset(-1.0, 0.0),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Вернуться назад',

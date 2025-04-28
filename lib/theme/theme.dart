@@ -28,5 +28,11 @@ final theme = ThemeData(
       fontFamily: 'Poppins',
       fontWeight: FontWeight.bold,
     ),
+    bodyMedium: TextStyle(
+      color: Color.fromARGB(200, 0, 0, 0),
+      fontSize: 23,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.bold,
+    )
   ),
 );

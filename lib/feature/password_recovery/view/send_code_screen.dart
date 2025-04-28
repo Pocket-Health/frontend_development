@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/feature/CustomPageRoute.dart';
 
 class SendCodeScreen extends StatefulWidget {
   const SendCodeScreen({super.key});
@@ -154,9 +155,13 @@ class _SendCodeScreen extends State<SendCodeScreen> {
                                   ),
                                   child: TextButton(
                                     onPressed: () {
-                                      Navigator.of(
+                                      Navigator.push(
                                         context,
-                                      ).pushNamed('/check_code');
+                                        CustomPageRoute(
+                                          routeName: '/check_code',
+                                          beginOffset: Offset(1.0, 0.0),
+                                        ),
+                                      );
                                     },
                                     child: Text(
                                       'Отправить код',
@@ -179,9 +184,13 @@ class _SendCodeScreen extends State<SendCodeScreen> {
                                 SizedBox(height: spacing / 2),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(
+                                    Navigator.push(
                                       context,
-                                    ).pushNamed('/login');
+                                      CustomPageRoute(
+                                        routeName: '/login',
+                                        beginOffset: Offset(-1.0, 0.0),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Войти',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/feature/CustomPageRoute.dart';
 
 class CheckCodeScreen extends StatefulWidget {
   const CheckCodeScreen({super.key});
@@ -154,9 +155,13 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
                                   ),
                                   child: TextButton(
                                     onPressed: () {
-                                      Navigator.of(
+                                      Navigator.push(
                                         context,
-                                      ).pushNamed('/new_password');
+                                        CustomPageRoute(
+                                          routeName: '/new_password',
+                                          beginOffset: Offset(1.0, 0.0),
+                                        ),
+                                      );
                                     },
                                     child: Text(
                                       'Проверить',
@@ -179,9 +184,13 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
                                 SizedBox(height: spacing / 2),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(
+                                    Navigator.push(
                                       context,
-                                    ).pushNamed('/send_code');
+                                      CustomPageRoute(
+                                        routeName: '/send_code',
+                                        beginOffset: Offset(-1.0, 0.0),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Вернуться назад',

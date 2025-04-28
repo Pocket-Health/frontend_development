@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/feature/CustomPageRoute.dart';
 import 'package:frontend_development/feature/registration/widget/widget.dart';
 
 class RegistrationUserScreen extends StatefulWidget {
@@ -29,7 +30,7 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
           return Stack(
             children: [
               Positioned(
-                top: screenSize.height/10,
+                top: screenSize.height / 10,
                 right: 0,
                 child: SvgPicture.asset(
                   'assets/images/registration/registration_screen.svg',
@@ -253,7 +254,13 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
                                   ),
                                   child: TextButton(
                                     onPressed: () {
-                                      Navigator.of(context).pushNamed('/registration_medical_card');
+                                      Navigator.push(
+                                        context,
+                                        CustomPageRoute(
+                                          routeName: '/registration_medical_card',
+                                          beginOffset: Offset(1.0, 0.0),
+                                        ),
+                                      );
                                     },
                                     child: Text(
                                       'Продолжить',
@@ -276,7 +283,13 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
                                 SizedBox(height: spacing / 2),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pushNamed('/login');
+                                    Navigator.push(
+                                      context,
+                                      CustomPageRoute(
+                                        routeName: '/login',
+                                        beginOffset: Offset(-1.0, 0.0),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Войти',

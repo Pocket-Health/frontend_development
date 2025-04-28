@@ -3,6 +3,7 @@ import 'package:frontend_development/feature/login/login.dart';
 import 'package:frontend_development/feature/registration/registration.dart';
 import 'package:frontend_development/feature/password_recovery/password_recovery.dart';
 import 'package:frontend_development/feature/chat/chat.dart';
+import 'package:frontend_development/feature/medical_card/medical_card.dart';
 
 final routes = {
   '/': (context) => const LoadScreen(),
@@ -13,4 +14,7 @@ final routes = {
   '/check_code': (context) => const CheckCodeScreen(),
   '/new_password': (context) => const NewPasswordScreen(),
   '/chat': (context) => const ChatScreen(),
+  '/medical_card': (context) => const MedicalCardScreen(),
+  //'/medication_schedule': (context) => const MedicationScheduleScreen(),
+  //'/settings': (context) => const SettingsScreen(),
 };

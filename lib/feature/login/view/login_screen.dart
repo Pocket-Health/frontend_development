@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/feature/CustomPageRoute.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -222,9 +223,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(height: spacing / 2),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(
+                                    Navigator.push(
                                       context,
-                                    ).pushNamed('/send_code');
+                                      CustomPageRoute(
+                                        routeName: '/send_code',
+                                        beginOffset: Offset(1.0, 0.0),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Забыли пароль?',
@@ -264,9 +269,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   child: TextButton(
                                     onPressed: () {
-                                      Navigator.of(
+                                      Navigator.push(
                                         context,
-                                      ).pushNamed('/chat');
+                                        CustomPageRoute(
+                                          routeName: '/chat',
+                                          beginOffset: Offset(1.0, 0.0),
+                                        ),
+                                      );
                                     },
                                     child: Text(
                                       'Войти',
@@ -289,9 +298,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(height: spacing / 2),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(
+                                    Navigator.push(
                                       context,
-                                    ).pushNamed('/registration_user');
+                                      CustomPageRoute(
+                                        routeName: '/registration_user',
+                                        beginOffset: Offset(1.0, 0.0),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Зарегистрироваться',
