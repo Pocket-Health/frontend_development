@@ -3,32 +3,25 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
-class RegistrationMedicalCardScreen extends StatefulWidget {
-  const RegistrationMedicalCardScreen({super.key});
+class EditMedicationScheduleScreen extends StatefulWidget {
+  const EditMedicationScheduleScreen({super.key});
 
   @override
-  State<RegistrationMedicalCardScreen> createState() =>
-      _RegistrationMedicalCardScreenState();
+  State<EditMedicationScheduleScreen> createState() =>
+      _EditMedicationScheduleScreenState();
 }
 
-class _RegistrationMedicalCardScreenState
-    extends State<RegistrationMedicalCardScreen> {
+class _EditMedicationScheduleScreenState
+    extends State<EditMedicationScheduleScreen> {
+  final List<String> _DaysOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
+  Set<String> _selectedDaysOfWeek = {};
 
-  final List<String> _bloodTypes = [
-    'I+',
-    'I-',
-    'II+',
-    'II-',
-    'III+',
-    'III-',
-    'IV+',
-    'IV-',
-  ];
-  String? _selectedBloodType;
+  List<TimeOfDay> _selectedTimes = [];
 
-  void _showBloodTypeDialog(BuildContext context) {
+  void __showDaysOfWeekDialog(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final inputFieldWidth = screenSize.width * 0.63;
+
     showDialog(
       context: context,
       builder: (context) {
@@ -41,28 +34,45 @@ class _RegistrationMedicalCardScreenState
             padding: const EdgeInsets.all(12),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: inputFieldWidth - 20),
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 2.2,
-                children:
-                    _bloodTypes.map((type) {
+              child: StatefulBuilder(
+                builder: (context, setLocalState) {
+                  return GridView.count(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 2.2,
+                    children:
+                    _DaysOfWeek.map((day) {
+                      final isSelected = _selectedDaysOfWeek.contains(day);
                       return GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedBloodType = type;
+                            if (isSelected) {
+                              _selectedDaysOfWeek.remove(day);
+                            } else {
+                              _selectedDaysOfWeek.add(day);
+                            }
                           });
-                          Navigator.pop(context);
+                          setLocalState(() {});
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 200),
                           decoration: ShapeDecoration(
                             gradient: LinearGradient(
                               begin: Alignment(-0.05, -1.5),
                               end: Alignment(0.05, 2.5),
-                              colors: [Color(0xFF34C8E8), Color(0xFF4E4AF2)],
+                              colors:
+                              isSelected
+                                  ? [
+                                Color(0xFF34C8E8),
+                                Color(0xFF4E4AF2),
+                              ]
+                                  : [
+                                Colors.grey.shade300,
+                                Colors.grey.shade400,
+                              ],
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -70,29 +80,231 @@ class _RegistrationMedicalCardScreenState
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            type,
+                            day,
                             style: TextStyle(
-                              color: Colors.white,
+                              color:
+                              isSelected ? Colors.white : Colors.black,
                               fontSize: 20,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
-                              shadows: [
+                              shadows:
+                              isSelected
+                                  ? [
                                 Shadow(
-                                  color: Colors.black54,
+                                  color: Colors.black45,
                                   offset: Offset(0, 0),
-                                  blurRadius: 15,
+                                  blurRadius: 10,
                                 ),
-                              ],
+                              ]
+                                  : [],
                             ),
                           ),
                         ),
                       );
                     }).toList(),
+                  );
+                },
               ),
             ),
           ),
         );
       },
+    );
+  }
+
+  void _showCustomTimeDialog(BuildContext context) {
+    int selectedHour = TimeOfDay.now().hour;
+    int selectedMinute = TimeOfDay.now().minute;
+    final screenSize = MediaQuery.of(context).size;
+    final inputFieldWidth = screenSize.width * 0.63;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: inputFieldWidth - 20),
+              child: StatefulBuilder(
+                builder: (context, setLocalState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Выберите время',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: _selectedTimes.map((time) {
+                          final isSelected = true;
+                          final formatted = time.format(context);
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedTimes.remove(time);
+                              });
+                              setLocalState(() {});
+                            },
+                            child: AnimatedContainer(
+                              duration: Duration(milliseconds: 200),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 16),
+                              decoration: ShapeDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment(-0.05, -1.5),
+                                  end: Alignment(0.05, 2.5),
+                                  colors: [
+                                    Color(0xFF34C8E8),
+                                    Color(0xFF4E4AF2),
+                                  ],
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                formatted,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildTimePickerItem(
+                            count: 24,
+                            initialItem: selectedHour,
+                            onSelectedItemChanged: (index) {
+                              selectedHour = index;
+                            },
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            ':',
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          _buildTimePickerItem(
+                            count: 60,
+                            initialItem: selectedMinute,
+                            onSelectedItemChanged: (index) {
+                              selectedMinute = index;
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        width: inputFieldWidth,
+                        height: inputFieldWidth / 4.5,
+                        decoration: ShapeDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment(-0.05, -1.5),
+                            end: Alignment(0.05, 2.5),
+                            colors: [
+                              Color(0xFF34C8E8),
+                              Color(0xFF4E4AF2),
+                            ],
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            final newTime = TimeOfDay(
+                              hour: selectedHour,
+                              minute: selectedMinute,
+                            );
+                            if (!_selectedTimes.contains(newTime)) {
+                              setState(() {
+                                _selectedTimes.add(newTime);
+                              });
+                              setLocalState(() {});
+                            }
+                          },
+                          child: Text(
+                            'Добавить',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Widget _buildTimePickerItem({
+    required int count,
+    required int initialItem,
+    required ValueChanged<int> onSelectedItemChanged,
+  }) {
+    return Container(
+      width: 60,
+      height: 150,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListWheelScrollView.useDelegate(
+        itemExtent: 40,
+        perspective: 0.003,
+        diameterRatio: 1.2,
+        physics: FixedExtentScrollPhysics(),
+        controller: FixedExtentScrollController(initialItem: initialItem),
+        onSelectedItemChanged: onSelectedItemChanged,
+        childDelegate: ListWheelChildBuilderDelegate(
+          childCount: count,
+          builder: (context, index) {
+            return Center(
+              child: Text(
+                index.toString().padLeft(2, '0'),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Poppins',
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -112,11 +324,11 @@ class _RegistrationMedicalCardScreenState
           return Stack(
             children: [
               Positioned(
-                top: screenSize.height / 10,
-                right: 0,
+                bottom: 0,
+                left: 0,
                 child: SvgPicture.asset(
-                  'assets/images/registration/registration_screen.svg',
-                  width: screenSize.width,
+                  'assets/images/medication_schedule/edit_medication_schedule.svg',
+                  width: screenSize.width * 0.95,
                 ),
               ),
               Center(
@@ -160,8 +372,9 @@ class _RegistrationMedicalCardScreenState
                                 children: [
                                   SizedBox(height: spacing / 2),
                                   Text(
-                                    'Ваши данные',
+                                    'Новое расписание',
                                     style: TextTheme.of(context).titleMedium,
+                                    textAlign: TextAlign.center,
                                   ),
                                   SizedBox(height: spacing / 2),
                                   Container(
@@ -192,7 +405,7 @@ class _RegistrationMedicalCardScreenState
                                               height: inputFieldWidth / 4.5,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                BorderRadius.circular(12),
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -203,118 +416,14 @@ class _RegistrationMedicalCardScreenState
                                           keyboardType: TextInputType.text,
                                           decoration: InputDecoration(
                                             border: InputBorder.none,
-                                            hintText: 'ФИО',
+                                            hintText: 'Название',
                                             hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
+                                            TextTheme.of(
+                                              context,
+                                            ).labelMedium,
                                           ),
                                           style:
-                                              TextTheme.of(context).labelSmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: spacing),
-                                  Container(
-                                    width: inputFieldWidth,
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color(0xFF2C3648),
-                                          blurRadius: 10,
-                                          offset: Offset(-4, -4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Center(
-                                          child: InnerShadow(
-                                            shadows: [
-                                              Shadow(
-                                                color: Color(0xFF191E29),
-                                                blurRadius: 5,
-                                                offset: Offset(0, 0),
-                                              ),
-                                            ],
-                                            child: Container(
-                                              width: inputFieldWidth,
-                                              height: inputFieldWidth / 4.5,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        TextField(
-                                          textAlign: TextAlign.center,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Рост',
-                                            hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
-                                          ),
-                                          style:
-                                              TextTheme.of(context).labelSmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: spacing),
-                                  Container(
-                                    width: inputFieldWidth,
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color(0xFF2C3648),
-                                          blurRadius: 10,
-                                          offset: Offset(-4, -4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Center(
-                                          child: InnerShadow(
-                                            shadows: [
-                                              Shadow(
-                                                color: Color(0xFF191E29),
-                                                blurRadius: 5,
-                                                offset: Offset(0, 0),
-                                              ),
-                                            ],
-                                            child: Container(
-                                              width: inputFieldWidth,
-                                              height: inputFieldWidth / 4.5,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        TextField(
-                                          textAlign: TextAlign.center,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Вес',
-                                            hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
-                                          ),
-                                          style:
-                                              TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelSmall,
                                         ),
                                       ],
                                     ),
@@ -322,8 +431,7 @@ class _RegistrationMedicalCardScreenState
                                   SizedBox(height: spacing),
                                   GestureDetector(
                                     onTap:
-                                        () =>
-                                        _showBloodTypeDialog(context),
+                                        () => __showDaysOfWeekDialog(context),
                                     child: Container(
                                       width: inputFieldWidth,
                                       decoration: BoxDecoration(
@@ -363,8 +471,11 @@ class _RegistrationMedicalCardScreenState
                                             width: inputFieldWidth,
                                             height: inputFieldWidth / 4.5,
                                             child: Text(
-                                              _selectedBloodType ??
-                                                  'Группа крови',
+                                              _selectedDaysOfWeek.isEmpty
+                                                  ? 'День недели'
+                                                  : _selectedDaysOfWeek.join(
+                                                ', ',
+                                              ),
                                               style:
                                               Theme.of(
                                                 context,
@@ -376,107 +487,63 @@ class _RegistrationMedicalCardScreenState
                                     ),
                                   ),
                                   SizedBox(height: spacing),
-                                  Container(
-                                    width: inputFieldWidth,
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color(0xFF2C3648),
-                                          blurRadius: 10,
-                                          offset: Offset(-4, -4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Center(
-                                          child: InnerShadow(
-                                            shadows: [
-                                              Shadow(
-                                                color: Color(0xFF191E29),
-                                                blurRadius: 5,
-                                                offset: Offset(0, 0),
-                                              ),
-                                            ],
-                                            child: Container(
-                                              width: inputFieldWidth,
-                                              height: inputFieldWidth / 4.5,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.white,
-                                              ),
-                                            ),
+                                  GestureDetector(
+                                    onTap: () => _showCustomTimeDialog(context),
+                                    child: Container(
+                                      width: inputFieldWidth,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0xFF2C3648),
+                                            blurRadius: 10,
+                                            offset: Offset(-4, -4),
                                           ),
-                                        ),
-                                        TextField(
-                                          textAlign: TextAlign.center,
-                                          keyboardType: TextInputType.text,
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Аллергии',
-                                            hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
-                                          ),
-                                          style:
-                                              TextTheme.of(context).labelSmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: spacing),
-                                  Container(
-                                    width: inputFieldWidth,
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color(0xFF2C3648),
-                                          blurRadius: 10,
-                                          offset: Offset(-4, -4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Center(
-                                          child: InnerShadow(
-                                            shadows: [
-                                              Shadow(
-                                                color: Color(0xFF191E29),
-                                                blurRadius: 5,
-                                                offset: Offset(0, 0),
-                                              ),
-                                            ],
-                                            child: Container(
-                                              width: inputFieldWidth,
-                                              height: inputFieldWidth / 4.5,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.white,
+                                        ],
+                                      ),
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Center(
+                                            child: InnerShadow(
+                                              shadows: [
+                                                Shadow(
+                                                  color: Color(0xFF191E29),
+                                                  blurRadius: 5,
+                                                  offset: Offset(0, 0),
+                                                ),
+                                              ],
+                                              child: Container(
+                                                width: inputFieldWidth,
+                                                height: inputFieldWidth / 4.5,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        TextField(
-                                          textAlign: TextAlign.center,
-                                          keyboardType: TextInputType.text,
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Заболевания',
-                                            hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: inputFieldWidth,
+                                            height: inputFieldWidth / 4.5,
+                                            child: Text(
+                                              _selectedTimes.isEmpty
+                                                  ? 'Добавить время'
+                                                  : _selectedTimes
+                                                  .map(
+                                                    (t) =>
+                                                    t.format(context),
+                                              )
+                                                  .join(', '),
+                                              style:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.labelMedium,
+                                            ),
                                           ),
-                                          style:
-                                              TextTheme.of(context).labelSmall,
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: spacing),
@@ -515,13 +582,13 @@ class _RegistrationMedicalCardScreenState
                                         Navigator.push(
                                           context,
                                           CustomPageRoute(
-                                            routeName: '/login',
+                                            routeName: '/medication_schedule',
                                             beginOffset: Offset(1.0, 0.0),
                                           ),
                                         );
                                       },
                                       child: Text(
-                                        'Регистрация',
+                                        'Сохранить',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 25,
@@ -544,7 +611,7 @@ class _RegistrationMedicalCardScreenState
                                       Navigator.push(
                                         context,
                                         CustomPageRoute(
-                                          routeName: '/registration_user',
+                                          routeName: '/medication_schedule',
                                           beginOffset: Offset(-1.0, 0.0),
                                         ),
                                       );

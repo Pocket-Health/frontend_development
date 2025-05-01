@@ -3,17 +3,14 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
-class RegistrationMedicalCardScreen extends StatefulWidget {
-  const RegistrationMedicalCardScreen({super.key});
+class EditMedicalCardScreen extends StatefulWidget {
+  const EditMedicalCardScreen({super.key});
 
   @override
-  State<RegistrationMedicalCardScreen> createState() =>
-      _RegistrationMedicalCardScreenState();
+  State<StatefulWidget> createState() => _EditMedicalCardScreenState();
 }
 
-class _RegistrationMedicalCardScreenState
-    extends State<RegistrationMedicalCardScreen> {
-
+class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
   final List<String> _bloodTypes = [
     'I+',
     'I-',
@@ -49,45 +46,45 @@ class _RegistrationMedicalCardScreenState
                 mainAxisSpacing: 10,
                 childAspectRatio: 2.2,
                 children:
-                    _bloodTypes.map((type) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedBloodType = type;
-                          });
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          decoration: ShapeDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment(-0.05, -1.5),
-                              end: Alignment(0.05, 2.5),
-                              colors: [Color(0xFF34C8E8), Color(0xFF4E4AF2)],
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            type,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black54,
-                                  offset: Offset(0, 0),
-                                  blurRadius: 15,
-                                ),
-                              ],
-                            ),
-                          ),
+                _bloodTypes.map((type) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedBloodType = type;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: ShapeDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment(-0.05, -1.5),
+                          end: Alignment(0.05, 2.5),
+                          colors: [Color(0xFF34C8E8), Color(0xFF4E4AF2)],
                         ),
-                      );
-                    }).toList(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        type,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black54,
+                              offset: Offset(0, 0),
+                              blurRadius: 15,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           ),
@@ -192,7 +189,7 @@ class _RegistrationMedicalCardScreenState
                                               height: inputFieldWidth / 4.5,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                BorderRadius.circular(12),
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -205,12 +202,12 @@ class _RegistrationMedicalCardScreenState
                                             border: InputBorder.none,
                                             hintText: 'ФИО',
                                             hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
+                                            TextTheme.of(
+                                              context,
+                                            ).labelMedium,
                                           ),
                                           style:
-                                              TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelSmall,
                                         ),
                                       ],
                                     ),
@@ -244,7 +241,7 @@ class _RegistrationMedicalCardScreenState
                                               height: inputFieldWidth / 4.5,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                BorderRadius.circular(12),
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -257,12 +254,12 @@ class _RegistrationMedicalCardScreenState
                                             border: InputBorder.none,
                                             hintText: 'Рост',
                                             hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
+                                            TextTheme.of(
+                                              context,
+                                            ).labelMedium,
                                           ),
                                           style:
-                                              TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelSmall,
                                         ),
                                       ],
                                     ),
@@ -296,7 +293,7 @@ class _RegistrationMedicalCardScreenState
                                               height: inputFieldWidth / 4.5,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                BorderRadius.circular(12),
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -309,12 +306,12 @@ class _RegistrationMedicalCardScreenState
                                             border: InputBorder.none,
                                             hintText: 'Вес',
                                             hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
+                                            TextTheme.of(
+                                              context,
+                                            ).labelMedium,
                                           ),
                                           style:
-                                              TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelSmall,
                                         ),
                                       ],
                                     ),
@@ -404,7 +401,7 @@ class _RegistrationMedicalCardScreenState
                                               height: inputFieldWidth / 4.5,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                BorderRadius.circular(12),
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -417,12 +414,12 @@ class _RegistrationMedicalCardScreenState
                                             border: InputBorder.none,
                                             hintText: 'Аллергии',
                                             hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
+                                            TextTheme.of(
+                                              context,
+                                            ).labelMedium,
                                           ),
                                           style:
-                                              TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelSmall,
                                         ),
                                       ],
                                     ),
@@ -456,7 +453,7 @@ class _RegistrationMedicalCardScreenState
                                               height: inputFieldWidth / 4.5,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                BorderRadius.circular(12),
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -469,12 +466,12 @@ class _RegistrationMedicalCardScreenState
                                             border: InputBorder.none,
                                             hintText: 'Заболевания',
                                             hintStyle:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelMedium,
+                                            TextTheme.of(
+                                              context,
+                                            ).labelMedium,
                                           ),
                                           style:
-                                              TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelSmall,
                                         ),
                                       ],
                                     ),
@@ -515,13 +512,13 @@ class _RegistrationMedicalCardScreenState
                                         Navigator.push(
                                           context,
                                           CustomPageRoute(
-                                            routeName: '/login',
+                                            routeName: '/medical_card',
                                             beginOffset: Offset(1.0, 0.0),
                                           ),
                                         );
                                       },
                                       child: Text(
-                                        'Регистрация',
+                                        'Сохранить',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 25,
@@ -544,7 +541,7 @@ class _RegistrationMedicalCardScreenState
                                       Navigator.push(
                                         context,
                                         CustomPageRoute(
-                                          routeName: '/registration_user',
+                                          routeName: '/medical_card',
                                           beginOffset: Offset(-1.0, 0.0),
                                         ),
                                       );

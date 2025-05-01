@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend_development/feature/CustomPageRoute.dart';
+import 'package:frontend_development/router/CustomPageRoute.dart';
 
 class MedicalCardScreen extends StatefulWidget {
   const MedicalCardScreen({super.key});
@@ -23,6 +23,7 @@ class _MedicalCardScreenState extends State<MedicalCardScreen> {
     final spacing = 15.0;
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 51,
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
           width: screenSize.width,
@@ -49,11 +50,17 @@ class _MedicalCardScreenState extends State<MedicalCardScreen> {
                 MaterialButton(
                   height: iconHeight,
                   onPressed: () {
-                    Navigator.pushNamed(context, '/edit_medical_card');
+                    Navigator.push(
+                      context,
+                      CustomPageRoute(
+                        routeName: '/edit_medical_card',
+                        beginOffset: Offset(1.0, 0.0),
+                      ),
+                    );
                   },
                   child: Container(
                     child: SvgPicture.asset(
-                      'assets/images/medical_card/edit_medical_card.svg',
+                      'assets/icons/edit_medical_card.svg',
                       height: 27,
                     ),
                   ),

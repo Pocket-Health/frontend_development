@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend_development/feature/CustomPageRoute.dart';
+import 'package:frontend_development/router/CustomPageRoute.dart';
 
 class CheckCodeScreen extends StatefulWidget {
   const CheckCodeScreen({super.key});
