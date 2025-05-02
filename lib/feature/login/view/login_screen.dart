@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/router/CustomPageRoute.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -37,7 +38,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 bottom: 100,
                 child: Center(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CustomPageRoute(
+                          routeName: '/un_auth_chat',
+                          beginOffset: Offset(1.0, 0.0),
+                        ),
+                      );
+                    },
                     child: Text(
                       'Продолжить без аккаунта',
                       style: TextStyle(
@@ -222,9 +231,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(height: spacing / 2),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(
+                                    Navigator.push(
                                       context,
-                                    ).pushNamed('/send_code');
+                                      CustomPageRoute(
+                                        routeName: '/send_code',
+                                        beginOffset: Offset(1.0, 0.0),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Забыли пароль?',
@@ -263,7 +276,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ],
                                   ),
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        CustomPageRoute(
+                                          routeName: '/chat',
+                                          beginOffset: Offset(1.0, 0.0),
+                                        ),
+                                      );
+                                    },
                                     child: Text(
                                       'Войти',
                                       style: TextStyle(
@@ -285,9 +306,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(height: spacing / 2),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(
+                                    Navigator.push(
                                       context,
-                                    ).pushNamed('/registration_user');
+                                      CustomPageRoute(
+                                        routeName: '/registration_user',
+                                        beginOffset: Offset(1.0, 0.0),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Зарегистрироваться',

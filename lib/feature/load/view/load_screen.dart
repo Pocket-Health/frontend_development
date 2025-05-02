@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/router/CustomPageRoute.dart';
 
 class LoadScreen extends StatefulWidget {
   const LoadScreen({super.key});
@@ -14,7 +15,13 @@ class _LoadScreenState extends State<LoadScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/login');
+        Navigator.push(
+          context,
+          CustomPageRoute(
+            routeName: '/login',
+            beginOffset: Offset(0.0, 0.0),
+          ),
+        );
       }
     });
   }
