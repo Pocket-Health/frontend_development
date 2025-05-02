@@ -8,7 +8,7 @@ import '../feature/medication_schedule/medication_schedule.dart';
 import '../feature/password_recovery/password_recovery.dart';
 import '../feature/registration/registration.dart';
 import '../feature/settings/settings.dart';
-//import '../feature/un_auth/un_auth.dart';
+import '../feature/un_auth/un_auth.dart';
 
 class CustomPageRoute<T> extends PageRouteBuilder<T> {
   final String routeName;
@@ -63,18 +63,18 @@ class CustomPageRoute<T> extends PageRouteBuilder<T> {
         return const EditMedicationScheduleScreen();
       case '/settings':
         return const SettingsScreen();
-      // case '/un_auth_chat':
-      //   return const UnAuthChatScreen();
-      // case '/un_auth_medical_card':
-      //   return const UnAuthMedicalCardScreen();
-      // case '/un_auth_medication_schedule':
-      //   return const UnAuthMedicationScheduleScreen();
-      // case '/un_auth_add_medication_schedule':
-      //   return const UnAuthAddMedicationScheduleScreen();
-      // case '/un_auth_edit_medication_schedule':
-      //   return const UnAuthEditMedicationScheduleScreen();
-      // case '/un_auth_settings':
-      //   return const UnAuthSettingsScreen();
+      case '/un_auth_chat':
+        return const UnAuthChatScreen();
+      case '/un_auth_medical_card':
+        return const UnAuthMedicalCardScreen();
+      case '/un_auth_medication_schedule':
+        return const UnAuthMedicationScheduleScreen();
+      case '/un_auth_add_medication_schedule':
+        return const UnAuthAddMedicationScheduleScreen();
+      case '/un_auth_edit_medication_schedule':
+        return const UnAuthEditMedicationScheduleScreen();
+      case '/un_auth_settings':
+        return const UnAuthSettingsScreen();
       default:
         return Scaffold(
           appBar: AppBar(
