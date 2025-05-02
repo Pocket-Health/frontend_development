@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_development/feature/medical_card/medical_card.dart';
-import 'package:frontend_development/feature/password_recovery/password_recovery.dart';
-import 'package:frontend_development/feature/registration/registration.dart';
 
 import '../feature/chat/chat.dart';
 import '../feature/load/load.dart';
 import '../feature/login/login.dart';
+import '../feature/medical_card/medical_card.dart';
 import '../feature/medication_schedule/medication_schedule.dart';
+import '../feature/password_recovery/password_recovery.dart';
+import '../feature/registration/registration.dart';
+import '../feature/settings/settings.dart';
+//import '../feature/un_auth/un_auth.dart';
 
 class CustomPageRoute<T> extends PageRouteBuilder<T> {
   final String routeName;
@@ -57,12 +59,22 @@ class CustomPageRoute<T> extends PageRouteBuilder<T> {
         return const MedicationScheduleScreen();
       case '/add_medication_schedule':
         return const AddMedicationScheduleScreen();
-      // case '/edit_medication_schedule':
-      //   return const EditMedicationScheduleScreen();
-      // case '/delete_medication_schedule':
-      //   return const DeleteMedicationScheduleScreen();
-      // case '/settings':
-      //   return const SettingsScreen();
+      case '/edit_medication_schedule':
+        return const EditMedicationScheduleScreen();
+      case '/settings':
+        return const SettingsScreen();
+      // case '/un_auth_chat':
+      //   return const UnAuthChatScreen();
+      // case '/un_auth_medical_card':
+      //   return const UnAuthMedicalCardScreen();
+      // case '/un_auth_medication_schedule':
+      //   return const UnAuthMedicationScheduleScreen();
+      // case '/un_auth_add_medication_schedule':
+      //   return const UnAuthAddMedicationScheduleScreen();
+      // case '/un_auth_edit_medication_schedule':
+      //   return const UnAuthEditMedicationScheduleScreen();
+      // case '/un_auth_settings':
+      //   return const UnAuthSettingsScreen();
       default:
         return Scaffold(
           appBar: AppBar(

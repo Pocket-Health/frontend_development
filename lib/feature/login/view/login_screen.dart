@@ -38,7 +38,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 bottom: 100,
                 child: Center(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CustomPageRoute(
+                          routeName: '/un_auth_chat',
+                          beginOffset: Offset(1.0, 0.0),
+                        ),
+                      );
+                    },
                     child: Text(
                       'Продолжить без аккаунта',
                       style: TextStyle(

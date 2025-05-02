@@ -529,7 +529,7 @@ class _EditMedicationScheduleScreenState
                                             height: inputFieldWidth / 4.5,
                                             child: Text(
                                               _selectedTimes.isEmpty
-                                                  ? 'Добавить время'
+                                                  ? 'Время'
                                                   : _selectedTimes
                                                   .map(
                                                     (t) =>

@@ -31,6 +31,80 @@ class _ChatScreenState extends State<ChatScreen> {
                 width: screenSize.width * 0.9,
               ),
             ),
+            Padding(
+              padding: EdgeInsets.only(top: 180),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 12,
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: screenSize.width * 0.8,
+                        ),
+                        child: InnerShadow(
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(
+                                style: BorderStyle.solid,
+                                width: 5,
+                                color: Color(0xFF37B6E9),
+                                strokeAlign: BorderSide.strokeAlignInside,
+                              ),
+                            ),
+                            child: Text(
+                              'У меня кашель, сильно болит горло и большая температура',
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 12,
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: screenSize.width * 0.8,
+                        ),
+                        child: InnerShadow(
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(
+                                style: BorderStyle.solid,
+                                width: 5,
+                                color: Color(0xFF4E4AF2),
+                                strokeAlign: BorderSide.strokeAlignInside,
+                              ),
+                            ),
+                            child: Text(
+                              'Похоже, у вас может быть ангина. Ангина – это острое воспаление небных миндалин, другие миндалины поражаются реже. Ангина относится к серьезным заболеваниям, она может приводить к развитию серьезных осложнений. Основные причины – основной причиной является невылеченный насморк.',
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Positioned(
               bottom: 0,
               child: Center(
@@ -81,8 +155,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                             vertical: 8,
                                           ),
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(17),
+                                            borderRadius: BorderRadius.circular(
+                                              17,
+                                            ),
                                             color: Colors.white,
                                           ),
                                         ),
@@ -108,14 +183,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                           border: InputBorder.none,
                                           hintText: 'Введите ваш вопрос',
                                           hintStyle:
-                                          Theme.of(
-                                            context,
-                                          ).textTheme.labelMedium,
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.labelMedium,
                                         ),
                                         style:
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.labelSmall,
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.labelSmall,
                                       ),
                                     ),
                                   ),
