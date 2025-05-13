@@ -38,6 +38,8 @@ dependencies:
   flutter_bloc: ^9.1.0
   equatable: ^2.0.7
   flutter_slidable: ^4.0.0
+  flutter_secure_storage: ^9.2.4
+  flutter_dotenv: ^5.2.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -60,6 +62,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - .env
     - assets/images/load/
     - assets/images/login/
     - assets/images/registration/

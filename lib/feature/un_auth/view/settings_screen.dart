@@ -66,63 +66,6 @@ class _UnAuthSettingsScreenState extends State<UnAuthSettingsScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   CustomPageRoute(
-                                  //     routeName: '/login',
-                                  //     beginOffset: Offset(1.0, 0.0),
-                                  //   ),
-                                  // );
-                                },
-                                child: Text(
-                                  'Сменить пароль',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.bold,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.black54,
-                                        offset: Offset(0, 0),
-                                        blurRadius: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Center(
-                      child: SizedBox(
-                        width: inputFieldWidth,
-                        height: inputFieldWidth / 6,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: InnerShadow(
-                            shadows: [
-                              Shadow(
-                                color: Color(0xFF2C3648),
-                                blurRadius: 10,
-                                offset: Offset(-4, -4),
-                              ),
-                            ],
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Color(0xFF353F54),
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.white10,
-                                  strokeAlign: BorderSide.strokeAlignInside,
-                                ),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
                                   setState(() {
                                     toggleOn = !toggleOn;
                                   });

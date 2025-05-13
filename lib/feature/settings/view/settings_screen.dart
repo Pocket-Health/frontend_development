@@ -66,13 +66,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   CustomPageRoute(
-                                  //     routeName: '/login',
-                                  //     beginOffset: Offset(1.0, 0.0),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    CustomPageRoute(
+                                      routeName: '/change_password',
+                                      beginOffset: Offset(1.0, 0.0),
+                                    ),
+                                  );
                                 },
                                 child: Text(
                                   'Сменить пароль',
