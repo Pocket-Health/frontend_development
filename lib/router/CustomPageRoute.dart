@@ -63,6 +63,8 @@ class CustomPageRoute<T> extends PageRouteBuilder<T> {
         return const EditMedicationScheduleScreen();
       case '/settings':
         return const SettingsScreen();
+      case '/change_password':
+        return const ChangePasswordScreen();
       case '/un_auth_chat':
         return const UnAuthChatScreen();
       case '/un_auth_medical_card':

@@ -3,80 +3,17 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
-import '../../../repository/login_repository.dart';
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _LoginScreenState();
+    return _ChangePasswordScreen();
   }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class _ChangePasswordScreen extends State<ChangePasswordScreen> {
   bool passwordVisible = true;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  void _login() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.white,
-          content: Text(
-            textAlign: TextAlign.center,
-            'Введите email и пароль',
-            style: TextStyle(color: Colors.black),
-          ),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
-      return;
-    }
-
-    final loginRepository = LoginRepository();
-    bool successfully = await loginRepository.getTokens(email: email, password: password);
-
-    if (successfully) {
-      Navigator.push(
-        context,
-        CustomPageRoute(
-          routeName: '/chat',
-          beginOffset: Offset(1.0, 0.0),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.white,
-          content: Text(
-            textAlign: TextAlign.center,
-            'Неверные данные',
-            style: TextStyle(color: Colors.black),
-          ),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
-      return;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,36 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Positioned(
                 bottom: 0,
-                right: 0,
+                left: 0,
                 child: SvgPicture.asset(
-                  'assets/images/login/login_screen.svg',
-                  width: screenSize.width,
-                ),
-              ),
-              Positioned(
-                width: screenSize.width,
-                bottom: 100,
-                child: Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        CustomPageRoute(
-                          routeName: '/un_auth_chat',
-                          beginOffset: Offset(1.0, 0.0),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Продолжить без аккаунта',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  'assets/images/password_recovery/password_recovery_screen.svg',
+                  width: screenSize.width * 0.87,
                 ),
               ),
               Center(
@@ -159,8 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 SizedBox(height: spacing / 2),
                                 Text(
-                                  'Вход',
+                                  'Смена пароля',
                                   style: TextTheme.of(context).titleMedium,
+                                  textAlign: TextAlign.center,
                                 ),
                                 SizedBox(height: spacing / 2),
                                 Container(
@@ -191,24 +103,53 @@ class _LoginScreenState extends State<LoginScreen> {
                                             height: inputFieldWidth / 4.5,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(12),
+                                              BorderRadius.circular(12),
                                               color: Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
-                                      TextField(
-                                        controller: _emailController,
-                                        textAlign: TextAlign.center,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: 'Почта',
-                                          hintStyle:
-                                              TextTheme.of(context).labelMedium,
+                                      SizedBox(height: spacing),
+                                      Center(
+                                        child: SizedBox(
+                                          width: inputFieldWidth,
+                                          child: TextField(
+                                            keyboardType:
+                                            TextInputType.visiblePassword,
+                                            textInputAction:
+                                            TextInputAction.done,
+                                            obscureText: passwordVisible,
+                                            textAlign: TextAlign.center,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: 'Старый пароль',
+                                              hintStyle:
+                                              TextTheme.of(
+                                                context,
+                                              ).labelMedium,
+                                              prefix: SizedBox(
+                                                width: inputFieldWidth / 12,
+                                              ),
+                                              suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    passwordVisible =
+                                                    !passwordVisible;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            style:
+                                            TextTheme.of(
+                                              context,
+                                            ).labelSmall,
+                                          ),
                                         ),
-                                        style: TextTheme.of(context).labelSmall,
                                       ),
                                     ],
                                   ),
@@ -242,32 +183,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                             height: inputFieldWidth / 4.5,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(12),
+                                              BorderRadius.circular(12),
                                               color: Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
+                                      SizedBox(height: spacing),
                                       Center(
                                         child: SizedBox(
                                           width: inputFieldWidth,
                                           child: TextField(
-                                            controller: _passwordController,
                                             keyboardType:
-                                                TextInputType.visiblePassword,
+                                            TextInputType.visiblePassword,
                                             textInputAction:
-                                                TextInputAction.done,
+                                            TextInputAction.done,
                                             obscureText: passwordVisible,
                                             textAlign: TextAlign.center,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
-                                              hintText: 'Пароль',
+                                              hintText: 'Новый пароль',
                                               hintStyle:
-                                                  TextTheme.of(
-                                                    context,
-                                                  ).labelMedium,
+                                              TextTheme.of(
+                                                context,
+                                              ).labelMedium,
                                               prefix: SizedBox(
-                                                width: inputFieldWidth / 5,
+                                                width: inputFieldWidth / 8,
                                               ),
                                               suffixIcon: IconButton(
                                                 icon: Icon(
@@ -278,38 +219,85 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 onPressed: () {
                                                   setState(() {
                                                     passwordVisible =
-                                                        !passwordVisible;
+                                                    !passwordVisible;
                                                   });
                                                 },
                                               ),
                                             ),
                                             style:
-                                                TextTheme.of(
-                                                  context,
-                                                ).labelSmall,
+                                            TextTheme.of(
+                                              context,
+                                            ).labelSmall,
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: spacing / 2),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      CustomPageRoute(
-                                        routeName: '/send_code',
-                                        beginOffset: Offset(1.0, 0.0),
+                                SizedBox(height: spacing),
+                                Container(
+                                  width: inputFieldWidth,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Color(0xFF2C3648),
+                                        blurRadius: 10,
+                                        offset: Offset(-4, -4),
                                       ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Забыли пароль?',
-                                    style: TextTheme.of(context).titleSmall,
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Center(
+                                        child: InnerShadow(
+                                          shadows: [
+                                            Shadow(
+                                              color: Color(0xFF191E29),
+                                              blurRadius: 5,
+                                              offset: Offset(0, 0),
+                                            ),
+                                          ],
+                                          child: Container(
+                                            width: inputFieldWidth,
+                                            height: inputFieldWidth / 4.5,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(12),
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: SizedBox(
+                                          width: inputFieldWidth,
+                                          child: TextField(
+                                            keyboardType:
+                                            TextInputType.visiblePassword,
+                                            textInputAction:
+                                            TextInputAction.done,
+                                            obscureText: passwordVisible,
+                                            textAlign: TextAlign.center,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: 'Повторите пароль',
+                                              hintStyle:
+                                              TextTheme.of(
+                                                context,
+                                              ).labelMedium,
+                                            ),
+                                            style:
+                                            TextTheme.of(
+                                              context,
+                                            ).labelSmall,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(height: spacing / 2),
+                                SizedBox(height: spacing),
                                 Container(
                                   width: inputFieldWidth,
                                   height: inputFieldWidth / 4.5,
@@ -341,9 +329,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ],
                                   ),
                                   child: TextButton(
-                                    onPressed: _login,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        CustomPageRoute(
+                                          routeName: '/settings',
+                                          beginOffset: Offset(1.0, 0.0),
+                                        ),
+                                      );
+                                    },
                                     child: Text(
-                                      'Войти',
+                                      'Сменить пароль',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 25,
@@ -366,13 +362,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.push(
                                       context,
                                       CustomPageRoute(
-                                        routeName: '/registration_user',
-                                        beginOffset: Offset(1.0, 0.0),
+                                        routeName: '/settings',
+                                        beginOffset: Offset(-1.0, 0.0),
                                       ),
                                     );
                                   },
                                   child: Text(
-                                    'Зарегистрироваться',
+                                    'Вернуться назад',
                                     style: TextTheme.of(context).titleSmall,
                                   ),
                                 ),

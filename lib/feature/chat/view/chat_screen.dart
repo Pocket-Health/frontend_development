@@ -31,8 +31,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 width: screenSize.width * 0.9,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 180),
+            Positioned(
+              bottom: 95,
+              width: screenSize.width,
               child: Column(
                 children: [
                   Align(
