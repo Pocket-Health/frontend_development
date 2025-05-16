@@ -13,27 +13,27 @@ import '../feature/un_auth/un_auth.dart';
 class CustomPageRoute<T> extends PageRouteBuilder<T> {
   final String routeName;
   final Offset beginOffset;
+  final Object? arguments;
 
-  CustomPageRoute({required this.routeName, required this.beginOffset})
-    : super(
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return _getPage(routeName);
-        },
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const end = Offset.zero;
-          const curve = Curves.fastLinearToSlowEaseIn;
+  CustomPageRoute({
+    required this.routeName,
+    required this.beginOffset,
+    this.arguments,
+  }) : super(
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return _getPage(routeName, arguments);
+    },
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const end = Offset.zero;
+      const curve = Curves.fastLinearToSlowEaseIn;
+      var tween = Tween(begin: beginOffset, end: end)
+          .chain(CurveTween(curve: curve));
+      return SlideTransition(position: animation.drive(tween), child: child);
+    },
+  );
 
-          var tween = Tween(
-            begin: beginOffset,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-          var offsetAnimation = animation.drive(tween);
 
-          return SlideTransition(position: offsetAnimation, child: child);
-        },
-      );
-
-  static Widget _getPage(String routeName) {
+  static Widget _getPage(String routeName, Object? arguments) {
     switch (routeName) {
       case '/':
         return const LoadScreen();
@@ -42,7 +42,11 @@ class CustomPageRoute<T> extends PageRouteBuilder<T> {
       case '/registration_user':
         return const RegistrationUserScreen();
       case '/registration_medical_card':
-        return const RegistrationMedicalCardScreen();
+        final args = arguments as Map<String, String>;
+        return RegistrationMedicalCardScreen(
+          email: args['email']!,
+          password: args['password']!,
+        );
       case '/send_code':
         return const SendCodeScreen();
       case '/check_code':
