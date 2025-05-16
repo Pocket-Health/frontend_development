@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/repository/registration_repository.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
-import 'package:frontend_development/feature/registration/widget/widget.dart';
 
 class RegistrationUserScreen extends StatefulWidget {
   const RegistrationUserScreen({super.key});
@@ -12,11 +12,87 @@ class RegistrationUserScreen extends StatefulWidget {
 }
 
 class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool passwordVisible = true;
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _registration() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Введите email и пароль',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    final registrationRepository = RegistrationRepository();
+    int responseCode = await registrationRepository.checkEmail(email: email, password: password);
+
+    if (responseCode == 200) {
+      Navigator.push(
+        context,
+        CustomPageRoute(
+          routeName: '/registration_medical_card',
+          beginOffset: Offset(1.0, 0.0),
+          arguments: {
+            'email': email,
+            'password': password,
+          },
+        ),
+      );
+    } else if (responseCode == 409) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Данная почта уже зарегистрирована',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неизвестная ошибка',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
   }
 
   @override
@@ -78,7 +154,56 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
                                   style: TextTheme.of(context).titleMedium,
                                 ),
                                 SizedBox(height: spacing / 2),
-                                InputField('Почта', TextInputType.emailAddress),
+                                Container(
+                                  width: inputFieldWidth,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Color(0xFF2C3648),
+                                        blurRadius: 10,
+                                        offset: Offset(-4, -4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Center(
+                                        child: InnerShadow(
+                                          shadows: [
+                                            Shadow(
+                                              color: Color(0xFF191E29),
+                                              blurRadius: 5,
+                                              offset: Offset(0, 0),
+                                            ),
+                                          ],
+                                          child: Container(
+                                            width: inputFieldWidth,
+                                            height: inputFieldWidth / 4.5,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(12),
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      TextField(
+                                        controller: _emailController,
+                                        textAlign: TextAlign.center,
+                                        keyboardType:
+                                        TextInputType.emailAddress,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Почта',
+                                          hintStyle:
+                                          TextTheme.of(context).labelMedium,
+                                        ),
+                                        style: TextTheme.of(context).labelSmall,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 SizedBox(height: spacing),
                                 Container(
                                   width: inputFieldWidth,
@@ -118,6 +243,7 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
                                         child: SizedBox(
                                           width: inputFieldWidth,
                                           child: TextField(
+                                            controller: _passwordController,
                                             keyboardType:
                                                 TextInputType.visiblePassword,
                                             textInputAction:
@@ -253,15 +379,7 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
                                     ],
                                   ),
                                   child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        CustomPageRoute(
-                                          routeName: '/registration_medical_card',
-                                          beginOffset: Offset(1.0, 0.0),
-                                        ),
-                                      );
-                                    },
+                                    onPressed: _registration,
                                     child: Text(
                                       'Продолжить',
                                       style: TextStyle(
