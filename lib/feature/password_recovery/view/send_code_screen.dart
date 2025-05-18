@@ -3,6 +3,8 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
+import '../../../repository/repository.dart';
+
 class SendCodeScreen extends StatefulWidget {
   const SendCodeScreen({super.key});
 
@@ -13,6 +15,71 @@ class SendCodeScreen extends StatefulWidget {
 }
 
 class _SendCodeScreen extends State<SendCodeScreen> {
+  final TextEditingController _emailController = TextEditingController();
+
+  Future<void> sendCode() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Введите email',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    final passwordRecoveryRepository = PasswordRecoveryRepository();
+    int responseCode = await passwordRecoveryRepository.sendCode(email: email);
+
+    if (responseCode == 200) {
+      Navigator.push(
+        context,
+        CustomPageRoute(routeName: '/check_code', beginOffset: Offset(1.0, 0.0), arguments: {'email': email}),
+      );
+    }else if (responseCode == 403) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Пользователь не найден',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неизвестная ошибка',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -108,6 +175,7 @@ class _SendCodeScreen extends State<SendCodeScreen> {
                                         ),
                                       ),
                                       TextField(
+                                        controller: _emailController,
                                         textAlign: TextAlign.center,
                                         keyboardType:
                                         TextInputType.emailAddress,
@@ -154,15 +222,7 @@ class _SendCodeScreen extends State<SendCodeScreen> {
                                     ],
                                   ),
                                   child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        CustomPageRoute(
-                                          routeName: '/check_code',
-                                          beginOffset: Offset(1.0, 0.0),
-                                        ),
-                                      );
-                                    },
+                                    onPressed: sendCode,
                                     child: Text(
                                       'Отправить код',
                                       style: TextStyle(
@@ -183,15 +243,7 @@ class _SendCodeScreen extends State<SendCodeScreen> {
                                 ),
                                 SizedBox(height: spacing / 2),
                                 TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      CustomPageRoute(
-                                        routeName: '/login',
-                                        beginOffset: Offset(-1.0, 0.0),
-                                      ),
-                                    );
-                                  },
+                                  onPressed: sendCode,
                                   child: Text(
                                     'Войти',
                                     style: TextTheme.of(context).titleSmall,

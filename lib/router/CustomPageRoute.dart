@@ -50,9 +50,15 @@ class CustomPageRoute<T> extends PageRouteBuilder<T> {
       case '/send_code':
         return const SendCodeScreen();
       case '/check_code':
-        return const CheckCodeScreen();
+        final args = arguments as Map<String, String>;
+        return CheckCodeScreen(
+          email: args['email']!
+        );
       case '/new_password':
-        return const NewPasswordScreen();
+        final args = arguments as Map<String, String>;
+        return NewPasswordScreen(
+          email: args['email']!
+        );
       case '/chat':
         return const ChatScreen();
       case '/medical_card':

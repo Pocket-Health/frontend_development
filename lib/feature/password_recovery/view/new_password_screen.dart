@@ -3,8 +3,12 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
+import '../../../repository/repository.dart';
+
 class NewPasswordScreen extends StatefulWidget {
-  const NewPasswordScreen({super.key});
+  final String email;
+
+  const NewPasswordScreen({super.key, required this.email});
 
   @override
   State<StatefulWidget> createState() {
@@ -13,7 +17,81 @@ class NewPasswordScreen extends StatefulWidget {
 }
 
 class _NewPasswordScreen extends State<NewPasswordScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool passwordVisible = true;
+
+  Future<void> passwordRecovery() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Введите email и пароль',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    final passwordRecoveryRepository = PasswordRecoveryRepository();
+    int responseCode = await passwordRecoveryRepository.passwordRecovery(
+      email: email,
+      password: password,
+    );
+
+    if (responseCode == 200) {
+      Navigator.push(
+        context,
+        CustomPageRoute(routeName: '/login', beginOffset: Offset(1.0, 0.0)),
+      );
+    } else if (responseCode == 403) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неверные данные',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неизвестная ошибка',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = widget.email;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +181,7 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
                                             height: inputFieldWidth / 4.5,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(12),
+                                                  BorderRadius.circular(12),
                                               color: Colors.white,
                                             ),
                                           ),
@@ -114,19 +192,20 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
                                         child: SizedBox(
                                           width: inputFieldWidth,
                                           child: TextField(
+                                            controller: _passwordController,
                                             keyboardType:
-                                            TextInputType.visiblePassword,
+                                                TextInputType.visiblePassword,
                                             textInputAction:
-                                            TextInputAction.done,
+                                                TextInputAction.done,
                                             obscureText: passwordVisible,
                                             textAlign: TextAlign.center,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                               hintText: 'Пароль',
                                               hintStyle:
-                                              TextTheme.of(
-                                                context,
-                                              ).labelMedium,
+                                                  TextTheme.of(
+                                                    context,
+                                                  ).labelMedium,
                                               prefix: SizedBox(
                                                 width: inputFieldWidth / 5.45,
                                               ),
@@ -139,15 +218,15 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
                                                 onPressed: () {
                                                   setState(() {
                                                     passwordVisible =
-                                                    !passwordVisible;
+                                                        !passwordVisible;
                                                   });
                                                 },
                                               ),
                                             ),
                                             style:
-                                            TextTheme.of(
-                                              context,
-                                            ).labelSmall,
+                                                TextTheme.of(
+                                                  context,
+                                                ).labelSmall,
                                           ),
                                         ),
                                       ),
@@ -183,7 +262,7 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
                                             height: inputFieldWidth / 4.5,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(12),
+                                                  BorderRadius.circular(12),
                                               color: Colors.white,
                                             ),
                                           ),
@@ -194,23 +273,23 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
                                           width: inputFieldWidth,
                                           child: TextField(
                                             keyboardType:
-                                            TextInputType.visiblePassword,
+                                                TextInputType.visiblePassword,
                                             textInputAction:
-                                            TextInputAction.done,
+                                                TextInputAction.done,
                                             obscureText: passwordVisible,
                                             textAlign: TextAlign.center,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                               hintText: 'Повторите пароль',
                                               hintStyle:
-                                              TextTheme.of(
-                                                context,
-                                              ).labelMedium,
+                                                  TextTheme.of(
+                                                    context,
+                                                  ).labelMedium,
                                             ),
                                             style:
-                                            TextTheme.of(
-                                              context,
-                                            ).labelSmall,
+                                                TextTheme.of(
+                                                  context,
+                                                ).labelSmall,
                                           ),
                                         ),
                                       ),
@@ -249,15 +328,7 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
                                     ],
                                   ),
                                   child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        CustomPageRoute(
-                                          routeName: '/login',
-                                          beginOffset: Offset(1.0, 0.0),
-                                        ),
-                                      );
-                                    },
+                                    onPressed: passwordRecovery,
                                     child: Text(
                                       'Сменить пароль',
                                       style: TextStyle(
