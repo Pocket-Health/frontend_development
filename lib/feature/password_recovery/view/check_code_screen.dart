@@ -3,8 +3,12 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
+import '../../../repository/repository.dart';
+
 class CheckCodeScreen extends StatefulWidget {
-  const CheckCodeScreen({super.key});
+  final String email;
+
+  const CheckCodeScreen({super.key, required this.email});
 
   @override
   State<StatefulWidget> createState() {
@@ -13,6 +17,85 @@ class CheckCodeScreen extends StatefulWidget {
 }
 
 class _CheckCodeScreen extends State<CheckCodeScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
+
+  Future<void> checkCode() async {
+    final email = _emailController.text.trim();
+    final code = _codeController.text.trim();
+
+    if (email.isEmpty || code.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Введите email и код',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    final passwordRecoveryRepository = PasswordRecoveryRepository();
+    int responseCode = await passwordRecoveryRepository.checkCode(
+      email: email,
+      code: code,
+    );
+
+    if (responseCode == 200) {
+      Navigator.push(
+        context,
+        CustomPageRoute(
+          routeName: '/new_password',
+          beginOffset: Offset(1.0, 0.0),
+          arguments: {'email': email},
+        ),
+      );
+    } else if (responseCode == 400) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неверный код',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неизвестная ошибка',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = widget.email;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -103,21 +186,27 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
                                               width: inputFieldWidth,
                                               height: inputFieldWidth / 4.5,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(12),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
                                                 color: Colors.white,
                                               ),
                                             ),
                                           ),
                                         ),
                                         TextField(
+                                          controller: _codeController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             border: InputBorder.none,
                                             hintText: 'Код',
-                                            hintStyle: TextTheme.of(context).labelMedium,
+                                            hintStyle:
+                                                TextTheme.of(
+                                                  context,
+                                                ).labelMedium,
                                           ),
-                                          style: TextTheme.of(context).labelSmall,
+                                          style:
+                                              TextTheme.of(context).labelSmall,
                                         ),
                                       ],
                                     ),
@@ -154,16 +243,7 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
                                       ],
                                     ),
                                     child: TextButton(
-                                      onPressed: () {
-                                        FocusScope.of(context).unfocus(); // Скрытие клавиатуры
-                                        Navigator.push(
-                                          context,
-                                          CustomPageRoute(
-                                            routeName: '/new_password',
-                                            beginOffset: Offset(1.0, 0.0),
-                                          ),
-                                        );
-                                      },
+                                      onPressed: checkCode,
                                       child: Text(
                                         'Проверить',
                                         style: TextStyle(
@@ -185,7 +265,9 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
                                   SizedBox(height: spacing / 2),
                                   TextButton(
                                     onPressed: () {
-                                      FocusScope.of(context).unfocus(); // На всякий случай
+                                      FocusScope.of(
+                                        context,
+                                      ).unfocus();
                                       Navigator.push(
                                         context,
                                         CustomPageRoute(
