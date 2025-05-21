@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/feature/medical_card/widget/widget.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
+import 'package:hive/hive.dart';
+
+import '../../../model/model.dart';
 
 class MedicalCardScreen extends StatefulWidget {
   const MedicalCardScreen({super.key});
@@ -11,34 +14,56 @@ class MedicalCardScreen extends StatefulWidget {
 }
 
 class _MedicalCardScreenState extends State<MedicalCardScreen> {
-  final TextEditingController _fullnameController = TextEditingController(
-    text: 'Иванов Иван Иванович',
-  );
+  String fullName = '';
+  String height = '';
+  String weight = '';
+  String bloodType = '';
+  String allergies = '';
+  String diseases = '';
 
-  final TextEditingController _heightController = TextEditingController(
-    text: '175 см',
-  );
+  @override
+  void initState() {
+    final box = Hive.box<MedicalCard>('medicalCardBox');
+    final medicalCard = box.get('medicalCard');
 
-  final TextEditingController _weightController = TextEditingController(
-    text: '75 кг',
-  );
-
-  final TextEditingController _bloodTypeController = TextEditingController(
-    text: 'IV-',
-  );
-
-  final TextEditingController _allergiesController = TextEditingController(
-    text: '',
-  );
-
-  final TextEditingController _diseasesController = TextEditingController(
-    text: '',
-  );
+    fullName = medicalCard?.fullName ?? '';
+    height = medicalCard?.height.toString() ?? '';
+    weight = medicalCard?.weight.toString() ?? '';
+    bloodType = medicalCard?.bloodType ?? '';
+    switch (bloodType) {
+      case '1+':
+        bloodType = 'I Rh+';
+        break;
+      case '1-':
+        bloodType = 'I Rh-';
+        break;
+      case '2+':
+        bloodType = 'II Rh+';
+        break;
+      case '2-':
+        bloodType = 'II Rh-';
+        break;
+      case '3+':
+        bloodType = 'III Rh+';
+        break;
+      case '3-':
+        bloodType = 'III Rh-';
+        break;
+      case '4+':
+        bloodType = 'IV Rh+';
+        break;
+      case '4-':
+        bloodType = 'IV Rh-';
+        break;
+    }
+    allergies = medicalCard?.allergies ?? '';
+    diseases = medicalCard?.diseases ?? '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final inputFieldWidth = screenSize.width;
     final iconHeight = 80.0;
     final spacing = 15.0;
     return Scaffold(
@@ -108,647 +133,13 @@ class _MedicalCardScreenState extends State<MedicalCardScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.only(top: spacing),
-                      width: screenSize.width * 0.87,
-                      child: IntrinsicHeight(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Color(0xFF353F54),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.white10,
-                              strokeAlign: BorderSide.strokeAlignInside,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF2C3648),
-                                blurRadius: 10,
-                                offset: Offset(-4, -4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.only(
-                                  bottom: 12,
-                                  left: 12,
-                                  right: 12,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 5,
-                                        bottom: 5,
-                                      ),
-                                      child: Text(
-                                        'ФИО',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 33,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0xFF2C3648),
-                                            blurRadius: 10,
-                                            offset: Offset(-4, -4),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Center(
-                                            child: InnerShadow(
-                                              shadows: [
-                                                Shadow(
-                                                  color: Color(0xFF191E29),
-                                                  blurRadius: 5,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
-                                              child: Container(
-                                                width: inputFieldWidth,
-                                                height: inputFieldWidth / 7,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          TextField(
-                                            controller: _fullnameController,
-                                            textAlign: TextAlign.center,
-                                            readOnly: true,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                            ),
-                                            style:
-                                                TextTheme.of(
-                                                  context,
-                                                ).bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.only(top: spacing),
-                      width: screenSize.width * 0.87,
-                      child: IntrinsicHeight(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Color(0xFF353F54),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.white10,
-                              strokeAlign: BorderSide.strokeAlignInside,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF2C3648),
-                                blurRadius: 10,
-                                offset: Offset(-4, -4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.only(
-                                  bottom: 12,
-                                  left: 12,
-                                  right: 12,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 5,
-                                        bottom: 5,
-                                      ),
-                                      child: Text(
-                                        'Рост',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 33,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0xFF2C3648),
-                                            blurRadius: 10,
-                                            offset: Offset(-4, -4),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Center(
-                                            child: InnerShadow(
-                                              shadows: [
-                                                Shadow(
-                                                  color: Color(0xFF191E29),
-                                                  blurRadius: 5,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
-                                              child: Container(
-                                                width: inputFieldWidth,
-                                                height: inputFieldWidth / 7,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          TextField(
-
-                                            controller: _heightController,
-                                            textAlign: TextAlign.center,
-                                            readOnly: true,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                            ),
-                                            style:
-                                            TextTheme.of(
-                                              context,
-                                            ).bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.only(top: spacing),
-                      width: screenSize.width * 0.87,
-                      child: IntrinsicHeight(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Color(0xFF353F54),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.white10,
-                              strokeAlign: BorderSide.strokeAlignInside,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF2C3648),
-                                blurRadius: 10,
-                                offset: Offset(-4, -4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.only(
-                                  bottom: 12,
-                                  left: 12,
-                                  right: 12,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 5,
-                                        bottom: 5,
-                                      ),
-                                      child: Text(
-                                        'Вес',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 33,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0xFF2C3648),
-                                            blurRadius: 10,
-                                            offset: Offset(-4, -4),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Center(
-                                            child: InnerShadow(
-                                              shadows: [
-                                                Shadow(
-                                                  color: Color(0xFF191E29),
-                                                  blurRadius: 5,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
-                                              child: Container(
-                                                width: inputFieldWidth,
-                                                height: inputFieldWidth / 7,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          TextField(
-                                            controller: _weightController,
-                                            textAlign: TextAlign.center,
-                                            readOnly: true,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                            ),
-                                            style:
-                                            TextTheme.of(
-                                              context,
-                                            ).bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.only(top: spacing),
-                      width: screenSize.width * 0.87,
-                      child: IntrinsicHeight(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Color(0xFF353F54),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.white10,
-                              strokeAlign: BorderSide.strokeAlignInside,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF2C3648),
-                                blurRadius: 10,
-                                offset: Offset(-4, -4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.only(
-                                  bottom: 12,
-                                  left: 12,
-                                  right: 12,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 5,
-                                        bottom: 5,
-                                      ),
-                                      child: Text(
-                                        'Группа крови',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 33,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0xFF2C3648),
-                                            blurRadius: 10,
-                                            offset: Offset(-4, -4),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Center(
-                                            child: InnerShadow(
-                                              shadows: [
-                                                Shadow(
-                                                  color: Color(0xFF191E29),
-                                                  blurRadius: 5,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
-                                              child: Container(
-                                                width: inputFieldWidth,
-                                                height: inputFieldWidth / 7,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          TextField(
-
-                                            controller: _bloodTypeController,
-                                            textAlign: TextAlign.center,
-                                            readOnly: true,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                            ),
-                                            style:
-                                            TextTheme.of(
-                                              context,
-                                            ).bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.only(top: spacing),
-                      width: screenSize.width * 0.87,
-                      child: IntrinsicHeight(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Color(0xFF353F54),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.white10,
-                              strokeAlign: BorderSide.strokeAlignInside,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF2C3648),
-                                blurRadius: 10,
-                                offset: Offset(-4, -4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.only(
-                                  bottom: 12,
-                                  left: 12,
-                                  right: 12,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 5,
-                                        bottom: 5,
-                                      ),
-                                      child: Text(
-                                        'Аллергии',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 33,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0xFF2C3648),
-                                            blurRadius: 10,
-                                            offset: Offset(-4, -4),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Center(
-                                            child: InnerShadow(
-                                              shadows: [
-                                                Shadow(
-                                                  color: Color(0xFF191E29),
-                                                  blurRadius: 5,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
-                                              child: Container(
-                                                width: inputFieldWidth,
-                                                height: inputFieldWidth / 7,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          TextField(
-
-                                            controller: _allergiesController,
-                                            textAlign: TextAlign.center,
-                                            readOnly: true,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                            ),
-                                            style:
-                                            TextTheme.of(
-                                              context,
-                                            ).bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.only(top: spacing),
-                      width: screenSize.width * 0.87,
-                      child: IntrinsicHeight(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Color(0xFF353F54),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.white10,
-                              strokeAlign: BorderSide.strokeAlignInside,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF2C3648),
-                                blurRadius: 10,
-                                offset: Offset(-4, -4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.only(
-                                  bottom: 12,
-                                  left: 12,
-                                  right: 12,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 5,
-                                        bottom: 5,
-                                      ),
-                                      child: Text(
-                                        'Заболевания',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 33,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0xFF2C3648),
-                                            blurRadius: 10,
-                                            offset: Offset(-4, -4),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Center(
-                                            child: InnerShadow(
-                                              shadows: [
-                                                Shadow(
-                                                  color: Color(0xFF191E29),
-                                                  blurRadius: 5,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
-                                              child: Container(
-                                                width: inputFieldWidth,
-                                                height: inputFieldWidth / 7,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          TextField(
-
-                                            controller: _diseasesController,
-                                            textAlign: TextAlign.center,
-                                            readOnly: true,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                            ),
-                                            style:
-                                            TextTheme.of(
-                                              context,
-                                            ).bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: spacing,)
+                  ShowField(title: 'ФИО', text: fullName),
+                  ShowField(title: 'Рост', text: '$height см'),
+                  ShowField(title: 'Вес', text: '$weight кг'),
+                  ShowField(title: 'Группа крови', text: bloodType),
+                  ShowField(title: 'Аллергии', text: allergies == 'None' ? '' : allergies),
+                  ShowField(title: 'Заболевания', text: diseases == 'None' ? '' : diseases),
+                  SizedBox(height: spacing),
                 ],
               ),
             ),

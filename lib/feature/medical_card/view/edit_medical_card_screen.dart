@@ -3,6 +3,9 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
+import '../../../model/model.dart';
+import '../../../repository/repository.dart';
+
 class EditMedicalCardScreen extends StatefulWidget {
   const EditMedicalCardScreen({super.key});
 
@@ -11,6 +14,98 @@ class EditMedicalCardScreen extends StatefulWidget {
 }
 
 class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  String? _selectedBloodType;
+  final TextEditingController _allergiesController = TextEditingController();
+  final TextEditingController _diseasesController = TextEditingController();
+
+  Future<void> editMedicalCard() async {
+    if (_fullNameController.text.isEmpty ||
+        _heightController.text.isEmpty ||
+        _weightController.text.isEmpty ||
+        _selectedBloodType == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Введите данные',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+    String bloodType;
+    switch (_selectedBloodType) {
+      case 'I+':
+        bloodType = '1+';
+        break;
+      case 'I-':
+        bloodType = '1-';
+        break;
+      case 'II+':
+        bloodType = '2+';
+        break;
+      case 'II-':
+        bloodType = '2-';
+        break;
+      case 'III+':
+        bloodType = '3+';
+        break;
+      case 'III-':
+        bloodType = '3-';
+        break;
+      case 'IV+':
+        bloodType = '4+';
+        break;
+      case 'IV-':
+        bloodType = '4-';
+        break;
+      default:
+        bloodType = '';
+    }
+    final medicalCard = MedicalCard(
+      fullName: _fullNameController.text,
+      height: int.parse(_heightController.text),
+      weight: double.parse(_weightController.text),
+      bloodType: bloodType,
+      allergies: _allergiesController.text == '' ? 'None' : _allergiesController.text,
+      diseases: _diseasesController.text == '' ? 'None' : _diseasesController.text,
+    );
+    int responseCode = await MedicalCardRepository().editMedicalCard(medicalCard);
+    if (responseCode == 200) {
+      Navigator.push(
+        context,
+        CustomPageRoute(
+          routeName: '/medical_card',
+          beginOffset: Offset(1.0, 0.0),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Низвестная ошибка',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
   final List<String> _bloodTypes = [
     'I+',
     'I-',
@@ -21,7 +116,6 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
     'IV+',
     'IV-',
   ];
-  String? _selectedBloodType;
 
   void _showBloodTypeDialog(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -157,7 +251,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                 children: [
                                   SizedBox(height: spacing / 2),
                                   Text(
-                                    'Ваши данные',
+                                    'Редактирование',
                                     style: TextTheme.of(context).titleMedium,
                                   ),
                                   SizedBox(height: spacing / 2),
@@ -196,6 +290,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                           ),
                                         ),
                                         TextField(
+                                          controller: _fullNameController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.text,
                                           decoration: InputDecoration(
@@ -248,6 +343,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                           ),
                                         ),
                                         TextField(
+                                          controller: _heightController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
@@ -300,6 +396,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                           ),
                                         ),
                                         TextField(
+                                          controller: _weightController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
@@ -408,6 +505,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                           ),
                                         ),
                                         TextField(
+                                          controller: _allergiesController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.text,
                                           decoration: InputDecoration(
@@ -460,6 +558,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                           ),
                                         ),
                                         TextField(
+                                          controller: _diseasesController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.text,
                                           decoration: InputDecoration(
@@ -508,15 +607,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                       ],
                                     ),
                                     child: TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          CustomPageRoute(
-                                            routeName: '/medical_card',
-                                            beginOffset: Offset(1.0, 0.0),
-                                          ),
-                                        );
-                                      },
+                                      onPressed: editMedicalCard,
                                       child: Text(
                                         'Сохранить',
                                         style: TextStyle(

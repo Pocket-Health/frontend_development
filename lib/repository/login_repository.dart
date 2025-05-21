@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'repository.dart';
 
 class LoginRepository {
   final Dio _dio = Dio();
@@ -23,10 +24,15 @@ class LoginRepository {
       if (accessToken != null && refreshToken != null) {
         await _secureStorage.write(key: 'accessToken', value: accessToken);
         await _secureStorage.write(key: 'refreshToken', value: refreshToken);
+        getData();
       }
     } catch (e) {
       return false;
     }
     return true;
+  }
+
+  void getData() async {
+    await MedicalCardRepository().getMedicalCard();
   }
 }

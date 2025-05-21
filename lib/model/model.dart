@@ -1,0 +1,1 @@
+export 'medical_card.dart';
