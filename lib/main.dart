@@ -22,5 +22,8 @@ Future<void> main() async {
   Hive.registerAdapter(ChatHistoryAdapter());
   await Hive.openBox<ChatHistory>('chatHistoryBox');
 
+  Hive.registerAdapter(SettingsAdapter());
+  await Hive.openBox<Settings>('settingsBox');
+
   runApp(const PocketHealthApp());
 }

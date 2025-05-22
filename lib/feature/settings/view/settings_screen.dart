@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_development/repository/repository.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
+import 'package:hive/hive.dart';
+
+import '../../../model/model.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -12,6 +16,61 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool toggleOn = true;
+
+  void toggleNotification() async {
+    if (toggleOn) {
+      final responseCode = await SettingsRepository().disableNotification();
+      if (responseCode == 200) {
+        setState(() {
+          toggleOn = false;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.white,
+            content: Text(
+              textAlign: TextAlign.center,
+              'Не удалось отключить уведомления',
+              style: TextStyle(color: Colors.black),
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    } else {
+      final responseCode = await SettingsRepository().enableNotification();
+      if (responseCode == 200) {
+        setState(() {
+          toggleOn = true;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.white,
+            content: Text(
+              textAlign: TextAlign.center,
+              'Не удалось включить уведомления',
+              style: TextStyle(color: Colors.black),
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final box = Hive.box<Settings>('settingsBox');
+    toggleOn = box.get('settings')?.notification ?? true;
+  }
 
   @override
   Widget build(BuildContext context) {
