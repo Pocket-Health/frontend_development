@@ -243,7 +243,15 @@ class _SendCodeScreen extends State<SendCodeScreen> {
                                 ),
                                 SizedBox(height: spacing / 2),
                                 TextButton(
-                                  onPressed: sendCode,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      CustomPageRoute(
+                                        routeName: '/login',
+                                        beginOffset: Offset(-1.0, 0.0),
+                                      ),
+                                    );
+                                  },
                                   child: Text(
                                     'Войти',
                                     style: TextTheme.of(context).titleSmall,

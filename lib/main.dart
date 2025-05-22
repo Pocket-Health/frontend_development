@@ -19,5 +19,8 @@ Future<void> main() async {
   Hive.registerAdapter(MedicalCardAdapter());
   await Hive.openBox<MedicalCard>('medicalCardBox');
 
+  Hive.registerAdapter(ChatHistoryAdapter());
+  await Hive.openBox<ChatHistory>('chatHistoryBox');
+
   runApp(const PocketHealthApp());
 }

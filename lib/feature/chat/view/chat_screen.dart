@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
+import 'package:hive/hive.dart';
+
+import '../../../model/model.dart';
+import '../../../repository/repository.dart';
+import '../widget/widget.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -11,6 +16,64 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController _questionController = TextEditingController();
+  List<Map<String, dynamic>> messages = [];
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final box = Hive.box<ChatHistory>('chatHistoryBox');
+    messages = box.get('chatHistory')?.messages.reversed.toList() ?? [];
+  }
+
+  void sendQuestion() async {
+    String question = _questionController.text;
+    if (question.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Введите вопрос',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      messages.insert(0, {
+        'message': {'text': question},
+        'message2': {'text': 'Ожидайте ответа...'},
+      });
+      _questionController.clear();
+    });
+
+    final responseCode = await ChatRepository().sendQuestion(
+      question: question,
+    );
+
+    final box = Hive.box<ChatHistory>('chatHistoryBox');
+
+    if (responseCode == 200) {
+      final updatedMessages = box.get('chatHistory')?.messages ?? [];
+      setState(() {
+        messages = updatedMessages.reversed.toList();
+      });
+    } else {
+      setState(() {
+        messages[0]['message2']['text'] =
+        'Ошибка при получении ответа';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -32,75 +95,45 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             Positioned(
+              top: 0,
               bottom: 95,
               width: screenSize.width,
               child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 4,
+                  Expanded(
+                    child: ListView.builder(
+                      reverse: true,
+                      padding: EdgeInsets.symmetric(
                         horizontal: 12,
+                        vertical: 4,
                       ),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: screenSize.width * 0.8,
-                        ),
-                        child: InnerShadow(
-                          child: Container(
-                            padding: EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(40),
-                              border: Border.all(
-                                style: BorderStyle.solid,
-                                width: 5,
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final item = messages[index];
+                        final question = item['message']?['text'] ?? '';
+                        final answer = item['message2']?['text'] ?? '';
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ChatBubble(
+                                text: question,
                                 color: Color(0xFF37B6E9),
-                                strokeAlign: BorderSide.strokeAlignInside,
                               ),
                             ),
-                            child: Text(
-                              'У меня кашель, сильно болит горло и большая температура',
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 12,
-                      ),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: screenSize.width * 0.8,
-                        ),
-                        child: InnerShadow(
-                          child: Container(
-                            padding: EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(40),
-                              border: Border.all(
-                                style: BorderStyle.solid,
-                                width: 5,
+                            SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: ChatBubble(
+                                text: answer,
                                 color: Color(0xFF4E4AF2),
-                                strokeAlign: BorderSide.strokeAlignInside,
                               ),
                             ),
-                            child: Text(
-                              'Похоже, у вас может быть ангина. Ангина – это острое воспаление небных миндалин, другие миндалины поражаются реже. Ангина относится к серьезным заболеваниям, она может приводить к развитию серьезных осложнений. Основные причины – основной причиной является невылеченный насморк.',
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          ),
-                        ),
-                      ),
+                            SizedBox(height: 10),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -168,31 +201,48 @@ class _ChatScreenState extends State<ChatScreen> {
                                   Container(
                                     width: inputFieldWidth,
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 8,
+                                      horizontal: 12,
+                                      vertical: 4,
                                     ),
-                                    child: ConstrainedBox(
-                                      constraints: BoxConstraints(
-                                        maxHeight: inputFieldWidth / 2,
-                                      ),
-                                      child: TextField(
-                                        textAlign: TextAlign.center,
-                                        keyboardType: TextInputType.multiline,
-                                        maxLines: null,
-                                        minLines: 1,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: 'Введите ваш вопрос',
-                                          hintStyle:
-                                              Theme.of(
-                                                context,
-                                              ).textTheme.labelMedium,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxHeight: inputFieldWidth / 2,
+                                            ),
+                                            child: TextField(
+                                              controller: _questionController,
+                                              textAlign: TextAlign.left,
+                                              keyboardType:
+                                                  TextInputType.multiline,
+                                              maxLines: null,
+                                              minLines: 1,
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText: 'Введите ваш вопрос',
+                                                hintStyle:
+                                                    Theme.of(
+                                                      context,
+                                                    ).textTheme.labelMedium,
+                                              ),
+                                              style:
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.labelSmall,
+                                            ),
+                                          ),
                                         ),
-                                        style:
-                                            Theme.of(
-                                              context,
-                                            ).textTheme.labelSmall,
-                                      ),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.send,
+                                            color: Color(0xFF353F54),
+                                          ),
+                                          onPressed: () {
+                                            sendQuestion();
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
