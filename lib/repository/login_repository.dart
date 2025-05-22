@@ -34,5 +34,6 @@ class LoginRepository {
 
   void getData() async {
     await MedicalCardRepository().getMedicalCard();
+    await ChatRepository().getChatHistory();
   }
 }
