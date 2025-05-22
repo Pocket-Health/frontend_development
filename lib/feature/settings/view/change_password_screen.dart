@@ -3,6 +3,8 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
+import '../../../repository/repository.dart';
+
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
 
@@ -13,7 +15,122 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreen extends State<ChangePasswordScreen> {
+  final TextEditingController _oldPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool passwordVisible = true;
+
+  Future<void> changePassword() async {
+    final oldPassword = _oldPasswordController.text;
+    final newPassword = _newPasswordController.text;
+
+    if (oldPassword.isEmpty || newPassword.isEmpty || _confirmPasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Введите старый и новый пароль',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (oldPassword == newPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Новый пароль не должен совпадать со старым',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (newPassword != _confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Пароли не совпадают',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    final settingsRepository = SettingsRepository();
+    int responseCode = await settingsRepository.changePassword(oldPassword, newPassword);
+
+    if (responseCode == 200) {
+      Navigator.push(
+        context,
+        CustomPageRoute(
+          routeName: '/settings',
+          beginOffset: Offset(1.0, 0.0),
+        ),
+      );
+    } else if (responseCode == 400) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неверный старый пароль',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неизвестная ошибка',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+  }
+
+  @override
+  void dispose() {
+    _oldPasswordController.dispose();
+    _newPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +220,7 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                             height: inputFieldWidth / 4.5,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(12),
+                                                  BorderRadius.circular(12),
                                               color: Colors.white,
                                             ),
                                           ),
@@ -114,19 +231,20 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                         child: SizedBox(
                                           width: inputFieldWidth,
                                           child: TextField(
+                                            controller: _oldPasswordController,
                                             keyboardType:
-                                            TextInputType.visiblePassword,
+                                                TextInputType.visiblePassword,
                                             textInputAction:
-                                            TextInputAction.done,
+                                                TextInputAction.done,
                                             obscureText: passwordVisible,
                                             textAlign: TextAlign.center,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                               hintText: 'Старый пароль',
                                               hintStyle:
-                                              TextTheme.of(
-                                                context,
-                                              ).labelMedium,
+                                                  TextTheme.of(
+                                                    context,
+                                                  ).labelMedium,
                                               prefix: SizedBox(
                                                 width: inputFieldWidth / 12,
                                               ),
@@ -139,15 +257,15 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                                 onPressed: () {
                                                   setState(() {
                                                     passwordVisible =
-                                                    !passwordVisible;
+                                                        !passwordVisible;
                                                   });
                                                 },
                                               ),
                                             ),
                                             style:
-                                            TextTheme.of(
-                                              context,
-                                            ).labelSmall,
+                                                TextTheme.of(
+                                                  context,
+                                                ).labelSmall,
                                           ),
                                         ),
                                       ),
@@ -183,7 +301,7 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                             height: inputFieldWidth / 4.5,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(12),
+                                                  BorderRadius.circular(12),
                                               color: Colors.white,
                                             ),
                                           ),
@@ -194,19 +312,20 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                         child: SizedBox(
                                           width: inputFieldWidth,
                                           child: TextField(
+                                            controller: _newPasswordController,
                                             keyboardType:
-                                            TextInputType.visiblePassword,
+                                                TextInputType.visiblePassword,
                                             textInputAction:
-                                            TextInputAction.done,
+                                                TextInputAction.done,
                                             obscureText: passwordVisible,
                                             textAlign: TextAlign.center,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                               hintText: 'Новый пароль',
                                               hintStyle:
-                                              TextTheme.of(
-                                                context,
-                                              ).labelMedium,
+                                                  TextTheme.of(
+                                                    context,
+                                                  ).labelMedium,
                                               prefix: SizedBox(
                                                 width: inputFieldWidth / 8,
                                               ),
@@ -219,15 +338,15 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                                 onPressed: () {
                                                   setState(() {
                                                     passwordVisible =
-                                                    !passwordVisible;
+                                                        !passwordVisible;
                                                   });
                                                 },
                                               ),
                                             ),
                                             style:
-                                            TextTheme.of(
-                                              context,
-                                            ).labelSmall,
+                                                TextTheme.of(
+                                                  context,
+                                                ).labelSmall,
                                           ),
                                         ),
                                       ),
@@ -263,7 +382,7 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                             height: inputFieldWidth / 4.5,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(12),
+                                                  BorderRadius.circular(12),
                                               color: Colors.white,
                                             ),
                                           ),
@@ -273,24 +392,25 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                         child: SizedBox(
                                           width: inputFieldWidth,
                                           child: TextField(
+                                            controller: _confirmPasswordController,
                                             keyboardType:
-                                            TextInputType.visiblePassword,
+                                                TextInputType.visiblePassword,
                                             textInputAction:
-                                            TextInputAction.done,
+                                                TextInputAction.done,
                                             obscureText: passwordVisible,
                                             textAlign: TextAlign.center,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                               hintText: 'Повторите пароль',
                                               hintStyle:
-                                              TextTheme.of(
-                                                context,
-                                              ).labelMedium,
+                                                  TextTheme.of(
+                                                    context,
+                                                  ).labelMedium,
                                             ),
                                             style:
-                                            TextTheme.of(
-                                              context,
-                                            ).labelSmall,
+                                                TextTheme.of(
+                                                  context,
+                                                ).labelSmall,
                                           ),
                                         ),
                                       ),
@@ -329,15 +449,7 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                                     ],
                                   ),
                                   child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        CustomPageRoute(
-                                          routeName: '/settings',
-                                          beginOffset: Offset(1.0, 0.0),
-                                        ),
-                                      );
-                                    },
+                                    onPressed: changePassword,
                                     child: Text(
                                       'Сменить пароль',
                                       style: TextStyle(
