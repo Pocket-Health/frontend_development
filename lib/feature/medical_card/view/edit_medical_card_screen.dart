@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
+import 'package:hive/hive.dart';
 
 import '../../../model/model.dart';
 import '../../../repository/repository.dart';
@@ -44,28 +45,28 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
     }
     String bloodType;
     switch (_selectedBloodType) {
-      case 'I+':
+      case 'I Rh+':
         bloodType = '1+';
         break;
-      case 'I-':
+      case 'I Rh-':
         bloodType = '1-';
         break;
-      case 'II+':
+      case 'II Rh+':
         bloodType = '2+';
         break;
-      case 'II-':
+      case 'II Rh-':
         bloodType = '2-';
         break;
-      case 'III+':
+      case 'III Rh+':
         bloodType = '3+';
         break;
-      case 'III-':
+      case 'III Rh-':
         bloodType = '3-';
         break;
-      case 'IV+':
+      case 'IV Rh+':
         bloodType = '4+';
         break;
-      case 'IV-':
+      case 'IV Rh-':
         bloodType = '4-';
         break;
       default:
@@ -107,14 +108,14 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
   }
 
   final List<String> _bloodTypes = [
-    'I+',
-    'I-',
-    'II+',
-    'II-',
-    'III+',
-    'III-',
-    'IV+',
-    'IV-',
+    'I Rh+',
+    'I Rh-',
+    'II Rh+',
+    'II Rh-',
+    'III Rh+',
+    'III Rh-',
+    'IV Rh+',
+    'IV Rh-',
   ];
 
   void _showBloodTypeDialog(BuildContext context) {
@@ -190,6 +191,41 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
   @override
   void initState() {
     super.initState();
+    final box = Hive.box<MedicalCard>('medicalCardBox');
+    MedicalCard? medicalCard = box.get('medicalCard');
+    _fullNameController.text = medicalCard?.fullName ?? '';
+    _heightController.text = medicalCard?.height.toString() ?? '';
+    _weightController.text = medicalCard?.weight.toString() ?? '';
+    String? bloodType;
+    switch (medicalCard?.bloodType) {
+      case '1+':
+        bloodType = 'I Rh+';
+        break;
+      case '1-':
+        bloodType = 'I Rh-';
+        break;
+      case '2+':
+        bloodType = 'II Rh+';
+        break;
+      case '2-':
+        bloodType = 'II Rh-';
+        break;
+      case '3+':
+        bloodType = 'III Rh+';
+        break;
+      case '3-':
+        bloodType = 'III Rh-';
+        break;
+      case '4+':
+        bloodType = 'IV Rh+';
+        break;
+      case '4-':
+        bloodType = 'IV Rh-';
+        break;
+    }
+    _selectedBloodType = bloodType ?? '';
+    _allergiesController.text = medicalCard?.allergies == 'None' ? '' : medicalCard?.allergies ?? '';
+    _diseasesController.text = medicalCard?.diseases == 'None' ? '' : medicalCard?.diseases ?? '';
   }
 
   @override
@@ -302,7 +338,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                             ).labelMedium,
                                           ),
                                           style:
-                                          TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelMedium,
                                         ),
                                       ],
                                     ),
@@ -355,7 +391,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                             ).labelMedium,
                                           ),
                                           style:
-                                          TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelMedium,
                                         ),
                                       ],
                                     ),
@@ -408,7 +444,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                             ).labelMedium,
                                           ),
                                           style:
-                                          TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelMedium,
                                         ),
                                       ],
                                     ),
@@ -517,7 +553,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                             ).labelMedium,
                                           ),
                                           style:
-                                          TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelMedium,
                                         ),
                                       ],
                                     ),
@@ -570,7 +606,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
                                             ).labelMedium,
                                           ),
                                           style:
-                                          TextTheme.of(context).labelSmall,
+                                          TextTheme.of(context).labelMedium,
                                         ),
                                       ],
                                     ),

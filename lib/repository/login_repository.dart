@@ -24,7 +24,8 @@ class LoginRepository {
       if (accessToken != null && refreshToken != null) {
         await _secureStorage.write(key: 'accessToken', value: accessToken);
         await _secureStorage.write(key: 'refreshToken', value: refreshToken);
-        getData();
+        await getData();
+        return true;
       }
     } catch (e) {
       return false;
@@ -32,8 +33,32 @@ class LoginRepository {
     return true;
   }
 
-  void getData() async {
+  Future getData() async {
     await MedicalCardRepository().getMedicalCard();
     await ChatRepository().getChatHistory();
+    await MedicationScheduleRepository().getMedicationSchedule();
+  }
+
+  Future refresh() async {
+    final url = dotenv.env['REFRESH_TOKEN_URL'].toString();
+    try {
+      final response = await _dio.post(
+        url,
+        options: Options(headers: {'Content-Type': 'application/json'}),
+        data: {
+          "refreshToken": await _secureStorage.read(key: 'refreshToken'),
+        },
+      );
+      final data = response.data;
+      final accessToken = data['accessToken'];
+      final refreshToken = data['refreshToken'];
+      if (accessToken != null && refreshToken != null) {
+        await _secureStorage.write(key: 'accessToken', value: accessToken);
+        await _secureStorage.write(key: 'refreshToken', value: refreshToken);
+        await getData();
+      }
+    } catch (e) {
+      return e;
+    }
   }
 }

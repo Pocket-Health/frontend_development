@@ -25,13 +25,13 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
+    if (password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
           content: Text(
             textAlign: TextAlign.center,
-            'Введите email и пароль',
+            'Введите пароль',
             style: TextStyle(color: Colors.black),
           ),
           behavior: SnackBarBehavior.floating,

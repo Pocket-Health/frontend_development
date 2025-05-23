@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'settings.g.dart';
 
 @HiveType(typeId: 3)
-class Settings {
+class Settings extends HiveObject {
   @HiveField(0)
   late bool notification;
 
