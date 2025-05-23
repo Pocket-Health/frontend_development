@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
+
+import '../../../repository/repository.dart';
 
 class LoadScreen extends StatefulWidget {
   const LoadScreen({super.key});
@@ -10,18 +13,37 @@ class LoadScreen extends StatefulWidget {
 }
 
 class _LoadScreenState extends State<LoadScreen> {
+
+  void hasToken() async {
+    final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+    final accessToken = await secureStorage.read(key: 'accessToken');
+    final refreshToken = await secureStorage.read(key: 'refreshToken');
+    if (accessToken != null && refreshToken != null) {
+      await LoginRepository().refresh();
+      Navigator.push(
+        context,
+        CustomPageRoute(
+          routeName: '/chat',
+          beginOffset: Offset(0.0, 0.0),
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        CustomPageRoute(
+          routeName: '/login',
+          beginOffset: Offset(0.0, 0.0),
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
-        Navigator.push(
-          context,
-          CustomPageRoute(
-            routeName: '/login',
-            beginOffset: Offset(0.0, 0.0),
-          ),
-        );
+        hasToken();
       }
     });
   }

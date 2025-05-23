@@ -10,6 +10,7 @@ class PocketHealthApp extends StatelessWidget {
     return MaterialApp(
       theme: theme,
       home: LoadScreen(),
+      locale: Locale('ru'),
     );
   }
 }

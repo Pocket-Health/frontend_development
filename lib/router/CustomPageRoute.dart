@@ -9,6 +9,7 @@ import '../feature/password_recovery/password_recovery.dart';
 import '../feature/registration/registration.dart';
 import '../feature/settings/settings.dart';
 import '../feature/un_auth/un_auth.dart';
+import '../model/model.dart';
 
 class CustomPageRoute<T> extends PageRouteBuilder<T> {
   final String routeName;
@@ -70,7 +71,7 @@ class CustomPageRoute<T> extends PageRouteBuilder<T> {
       case '/add_medication_schedule':
         return const AddMedicationScheduleScreen();
       case '/edit_medication_schedule':
-        return const EditMedicationScheduleScreen();
+        return EditMedicationScheduleScreen(medicationSchedule: arguments as MedicationSchedule);
       case '/settings':
         return const SettingsScreen();
       case '/change_password':

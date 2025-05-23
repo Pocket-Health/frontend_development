@@ -3,8 +3,16 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
+import '../../../model/model.dart';
+import '../../../repository/repository.dart';
+
 class EditMedicationScheduleScreen extends StatefulWidget {
-  const EditMedicationScheduleScreen({super.key});
+  final MedicationSchedule medicationSchedule;
+
+  const EditMedicationScheduleScreen({
+    super.key,
+    required this.medicationSchedule,
+  });
 
   @override
   State<EditMedicationScheduleScreen> createState() =>
@@ -13,10 +21,110 @@ class EditMedicationScheduleScreen extends StatefulWidget {
 
 class _EditMedicationScheduleScreenState
     extends State<EditMedicationScheduleScreen> {
-  final List<String> _DaysOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
+  final TextEditingController _medicationNameController =
+      TextEditingController();
+  final List<String> _daysOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
   Set<String> _selectedDaysOfWeek = {};
-
   List<TimeOfDay> _selectedTimes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _medicationNameController.text = widget.medicationSchedule.medicationName;
+
+    _selectedDaysOfWeek =
+        widget.medicationSchedule.scheduledDays
+            .map((index) => _daysOfWeek[index])
+            .toSet();
+
+    _selectedTimes =
+        widget.medicationSchedule.scheduledTimes.map((timeStr) {
+          final parts = timeStr.split(':');
+          return TimeOfDay(
+            hour: int.parse(parts[0]),
+            minute: int.parse(parts[1]),
+          );
+        }).toList();
+  }
+
+  @override
+  void dispose() {
+    _medicationNameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> editSchedule() async {
+    if (_medicationNameController.text.isEmpty ||
+        _selectedDaysOfWeek.isEmpty ||
+        _selectedTimes.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Заполните все поля',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+    final medicationSchedule = MedicationSchedule(
+      id: widget.medicationSchedule.id,
+      medicationName: _medicationNameController.text,
+      scheduledDays:
+          _selectedDaysOfWeek.map((day) => _daysOfWeek.indexOf(day)).toList(),
+      scheduledTimes:
+      _selectedTimes
+          .map((time) => '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}')
+          .toList(),
+    );
+    final responseCode = await MedicationScheduleRepository().editMedicationSchedule(
+      medicationSchedule,
+    );
+    if (responseCode == 200) {
+      Navigator.push(
+        context,
+        CustomPageRoute(
+          routeName: '/medication_schedule',
+          beginOffset: Offset(1.0, 0.0),
+        ),
+      );
+    } else if (responseCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Данное расписание не найдено',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неизвестная ошибка',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
 
   void __showDaysOfWeekDialog(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -44,64 +152,64 @@ class _EditMedicationScheduleScreenState
                     mainAxisSpacing: 10,
                     childAspectRatio: 2.2,
                     children:
-                    _DaysOfWeek.map((day) {
-                      final isSelected = _selectedDaysOfWeek.contains(day);
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (isSelected) {
-                              _selectedDaysOfWeek.remove(day);
-                            } else {
-                              _selectedDaysOfWeek.add(day);
-                            }
-                          });
-                          setLocalState(() {});
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 200),
-                          decoration: ShapeDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment(-0.05, -1.5),
-                              end: Alignment(0.05, 2.5),
-                              colors:
-                              isSelected
-                                  ? [
-                                Color(0xFF34C8E8),
-                                Color(0xFF4E4AF2),
-                              ]
-                                  : [
-                                Colors.grey.shade300,
-                                Colors.grey.shade400,
-                              ],
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            day,
-                            style: TextStyle(
-                              color:
-                              isSelected ? Colors.white : Colors.black,
-                              fontSize: 20,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold,
-                              shadows:
-                              isSelected
-                                  ? [
-                                Shadow(
-                                  color: Colors.black45,
-                                  offset: Offset(0, 0),
-                                  blurRadius: 10,
+                        _daysOfWeek.map((day) {
+                          final isSelected = _selectedDaysOfWeek.contains(day);
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (isSelected) {
+                                  _selectedDaysOfWeek.remove(day);
+                                } else {
+                                  _selectedDaysOfWeek.add(day);
+                                }
+                              });
+                              setLocalState(() {});
+                            },
+                            child: AnimatedContainer(
+                              duration: Duration(milliseconds: 200),
+                              decoration: ShapeDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment(-0.05, -1.5),
+                                  end: Alignment(0.05, 2.5),
+                                  colors:
+                                      isSelected
+                                          ? [
+                                            Color(0xFF34C8E8),
+                                            Color(0xFF4E4AF2),
+                                          ]
+                                          : [
+                                            Colors.grey.shade300,
+                                            Colors.grey.shade400,
+                                          ],
                                 ),
-                              ]
-                                  : [],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                day,
+                                style: TextStyle(
+                                  color:
+                                      isSelected ? Colors.white : Colors.black,
+                                  fontSize: 20,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.bold,
+                                  shadows:
+                                      isSelected
+                                          ? [
+                                            Shadow(
+                                              color: Colors.black45,
+                                              offset: Offset(0, 0),
+                                              blurRadius: 10,
+                                            ),
+                                          ]
+                                          : [],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                          );
+                        }).toList(),
                   );
                 },
               ),
@@ -147,45 +255,48 @@ class _EditMedicationScheduleScreenState
                       Wrap(
                         spacing: 10,
                         runSpacing: 10,
-                        children: _selectedTimes.map((time) {
-                          final isSelected = true;
-                          final formatted = time.format(context);
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedTimes.remove(time);
-                              });
-                              setLocalState(() {});
-                            },
-                            child: AnimatedContainer(
-                              duration: Duration(milliseconds: 200),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 16),
-                              decoration: ShapeDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment(-0.05, -1.5),
-                                  end: Alignment(0.05, 2.5),
-                                  colors: [
-                                    Color(0xFF34C8E8),
-                                    Color(0xFF4E4AF2),
-                                  ],
+                        children:
+                            _selectedTimes.map((time) {
+                              final isSelected = true;
+                              final formatted = time.format(context);
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedTimes.remove(time);
+                                  });
+                                  setLocalState(() {});
+                                },
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 200),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 16,
+                                  ),
+                                  decoration: ShapeDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment(-0.05, -1.5),
+                                      end: Alignment(0.05, 2.5),
+                                      colors: [
+                                        Color(0xFF34C8E8),
+                                        Color(0xFF4E4AF2),
+                                      ],
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    formatted,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: Text(
-                                formatted,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                              );
+                            }).toList(),
                       ),
                       const SizedBox(height: 20),
                       Row(
@@ -224,10 +335,7 @@ class _EditMedicationScheduleScreenState
                           gradient: LinearGradient(
                             begin: Alignment(-0.05, -1.5),
                             end: Alignment(0.05, 2.5),
-                            colors: [
-                              Color(0xFF34C8E8),
-                              Color(0xFF4E4AF2),
-                            ],
+                            colors: [Color(0xFF34C8E8), Color(0xFF4E4AF2)],
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -268,7 +376,6 @@ class _EditMedicationScheduleScreenState
     );
   }
 
-
   Widget _buildTimePickerItem({
     required int count,
     required int initialItem,
@@ -306,11 +413,6 @@ class _EditMedicationScheduleScreenState
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -372,7 +474,7 @@ class _EditMedicationScheduleScreenState
                                 children: [
                                   SizedBox(height: spacing / 2),
                                   Text(
-                                    'Новое расписание',
+                                    'Редактирование расписания',
                                     style: TextTheme.of(context).titleMedium,
                                     textAlign: TextAlign.center,
                                   ),
@@ -405,25 +507,26 @@ class _EditMedicationScheduleScreenState
                                               height: inputFieldWidth / 4.5,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                BorderRadius.circular(12),
+                                                    BorderRadius.circular(12),
                                                 color: Colors.white,
                                               ),
                                             ),
                                           ),
                                         ),
                                         TextField(
+                                          controller: _medicationNameController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.text,
                                           decoration: InputDecoration(
                                             border: InputBorder.none,
                                             hintText: 'Название',
                                             hintStyle:
-                                            TextTheme.of(
-                                              context,
-                                            ).labelMedium,
+                                                TextTheme.of(
+                                                  context,
+                                                ).labelMedium,
                                           ),
                                           style:
-                                          TextTheme.of(context).labelSmall,
+                                              TextTheme.of(context).labelMedium,
                                         ),
                                       ],
                                     ),
@@ -460,7 +563,7 @@ class _EditMedicationScheduleScreenState
                                                 height: inputFieldWidth / 4.5,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
-                                                  BorderRadius.circular(12),
+                                                      BorderRadius.circular(12),
                                                   color: Colors.white,
                                                 ),
                                               ),
@@ -474,12 +577,12 @@ class _EditMedicationScheduleScreenState
                                               _selectedDaysOfWeek.isEmpty
                                                   ? 'День недели'
                                                   : _selectedDaysOfWeek.join(
-                                                ', ',
-                                              ),
+                                                    ', ',
+                                                  ),
                                               style:
-                                              Theme.of(
-                                                context,
-                                              ).textTheme.labelMedium,
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.labelMedium,
                                             ),
                                           ),
                                         ],
@@ -517,7 +620,7 @@ class _EditMedicationScheduleScreenState
                                                 height: inputFieldWidth / 4.5,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
-                                                  BorderRadius.circular(12),
+                                                      BorderRadius.circular(12),
                                                   color: Colors.white,
                                                 ),
                                               ),
@@ -531,15 +634,15 @@ class _EditMedicationScheduleScreenState
                                               _selectedTimes.isEmpty
                                                   ? 'Время'
                                                   : _selectedTimes
-                                                  .map(
-                                                    (t) =>
-                                                    t.format(context),
-                                              )
-                                                  .join(', '),
+                                                      .map(
+                                                        (t) =>
+                                                            t.format(context),
+                                                      )
+                                                      .join(', '),
                                               style:
-                                              Theme.of(
-                                                context,
-                                              ).textTheme.labelMedium,
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.labelMedium,
                                             ),
                                           ),
                                         ],
@@ -578,15 +681,7 @@ class _EditMedicationScheduleScreenState
                                       ],
                                     ),
                                     child: TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          CustomPageRoute(
-                                            routeName: '/medication_schedule',
-                                            beginOffset: Offset(1.0, 0.0),
-                                          ),
-                                        );
-                                      },
+                                      onPressed: editSchedule,
                                       child: Text(
                                         'Сохранить',
                                         style: TextStyle(

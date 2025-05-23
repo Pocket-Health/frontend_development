@@ -3,6 +3,9 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
+import '../../../model/model.dart';
+import '../../../repository/repository.dart';
+
 class AddMedicationScheduleScreen extends StatefulWidget {
   const AddMedicationScheduleScreen({super.key});
 
@@ -13,10 +16,84 @@ class AddMedicationScheduleScreen extends StatefulWidget {
 
 class _AddMedicationScheduleScreenState
     extends State<AddMedicationScheduleScreen> {
-  final List<String> _DaysOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
+  final TextEditingController _medicationNameController = TextEditingController();
+  final List<String> _daysOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
   Set<String> _selectedDaysOfWeek = {};
 
   List<TimeOfDay> _selectedTimes = [];
+
+  Future<void> addSchedule() async {
+    if (_medicationNameController.text.isEmpty ||
+        _selectedDaysOfWeek.isEmpty ||
+        _selectedTimes.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Заполните все поля',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+    final medicationSchedule = MedicationSchedule(
+      id: '',
+      medicationName: _medicationNameController.text,
+      scheduledDays:
+      _selectedDaysOfWeek.map((day) => _daysOfWeek.indexOf(day)).toList(),
+      scheduledTimes:
+      _selectedTimes
+          .map((time) => '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}')
+          .toList(),
+    );
+    final responseCode = await MedicationScheduleRepository().addMedicationSchedule(
+      medicationSchedule,
+    );
+    if (responseCode == 201) {
+      Navigator.push(
+        context,
+        CustomPageRoute(
+          routeName: '/medication_schedule',
+          beginOffset: Offset(1.0, 0.0),
+        ),
+      );
+    } else if (responseCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Данное расписание не найдено',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Неизвестная ошибка',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
 
   void __showDaysOfWeekDialog(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -44,7 +121,7 @@ class _AddMedicationScheduleScreenState
                     mainAxisSpacing: 10,
                     childAspectRatio: 2.2,
                     children:
-                        _DaysOfWeek.map((day) {
+                        _daysOfWeek.map((day) {
                           final isSelected = _selectedDaysOfWeek.contains(day);
                           return GestureDetector(
                             onTap: () {
@@ -147,45 +224,48 @@ class _AddMedicationScheduleScreenState
                       Wrap(
                         spacing: 10,
                         runSpacing: 10,
-                        children: _selectedTimes.map((time) {
-                          final isSelected = true;
-                          final formatted = time.format(context);
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedTimes.remove(time);
-                              });
-                              setLocalState(() {});
-                            },
-                            child: AnimatedContainer(
-                              duration: Duration(milliseconds: 200),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 16),
-                              decoration: ShapeDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment(-0.05, -1.5),
-                                  end: Alignment(0.05, 2.5),
-                                  colors: [
-                                    Color(0xFF34C8E8),
-                                    Color(0xFF4E4AF2),
-                                  ],
+                        children:
+                            _selectedTimes.map((time) {
+                              final isSelected = true;
+                              final formatted = time.format(context);
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedTimes.remove(time);
+                                  });
+                                  setLocalState(() {});
+                                },
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 200),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 16,
+                                  ),
+                                  decoration: ShapeDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment(-0.05, -1.5),
+                                      end: Alignment(0.05, 2.5),
+                                      colors: [
+                                        Color(0xFF34C8E8),
+                                        Color(0xFF4E4AF2),
+                                      ],
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    formatted,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: Text(
-                                formatted,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                              );
+                            }).toList(),
                       ),
                       const SizedBox(height: 20),
                       Row(
@@ -224,10 +304,7 @@ class _AddMedicationScheduleScreenState
                           gradient: LinearGradient(
                             begin: Alignment(-0.05, -1.5),
                             end: Alignment(0.05, 2.5),
-                            colors: [
-                              Color(0xFF34C8E8),
-                              Color(0xFF4E4AF2),
-                            ],
+                            colors: [Color(0xFF34C8E8), Color(0xFF4E4AF2)],
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -267,7 +344,6 @@ class _AddMedicationScheduleScreenState
       },
     );
   }
-
 
   Widget _buildTimePickerItem({
     required int count,
@@ -412,6 +488,7 @@ class _AddMedicationScheduleScreenState
                                           ),
                                         ),
                                         TextField(
+                                          controller: _medicationNameController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.text,
                                           decoration: InputDecoration(
@@ -423,7 +500,7 @@ class _AddMedicationScheduleScreenState
                                                 ).labelMedium,
                                           ),
                                           style:
-                                              TextTheme.of(context).labelSmall,
+                                              TextTheme.of(context).labelMedium,
                                         ),
                                       ],
                                     ),
@@ -578,15 +655,7 @@ class _AddMedicationScheduleScreenState
                                       ],
                                     ),
                                     child: TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          CustomPageRoute(
-                                            routeName: '/medication_schedule',
-                                            beginOffset: Offset(1.0, 0.0),
-                                          ),
-                                        );
-                                      },
+                                      onPressed: addSchedule,
                                       child: Text(
                                         'Сохранить',
                                         style: TextStyle(

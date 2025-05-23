@@ -258,6 +258,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         child: TextButton(
                           onPressed: () {
+                            SettingsRepository().logout();
                             Navigator.push(
                               context,
                               CustomPageRoute(
