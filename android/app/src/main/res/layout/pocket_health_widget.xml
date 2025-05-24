@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF0000"
+    android:padding="0dp"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:clipToOutline="true"
+    android:backgroundTintMode="src_in"
+    android:theme="@style/Theme.Android.AppWidgetContainer">
+
+    <TextView
+        android:id="@+id/appwidget_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:contentDescription="SOS"
+        android:text="SOS"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="80sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins_bold"
+        tools:text="SOS" />
+</RelativeLayout>

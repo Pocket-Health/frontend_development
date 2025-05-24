@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "ru.nmasalkin.frontend_development"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -36,6 +36,9 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
