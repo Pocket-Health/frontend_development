@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,9 +14,10 @@ class LoadScreen extends StatefulWidget {
 }
 
 class _LoadScreenState extends State<LoadScreen> {
+  final AppLinks _appLinks = AppLinks();
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   void hasToken() async {
-    final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
     final accessToken = await secureStorage.read(key: 'accessToken');
     final refreshToken = await secureStorage.read(key: 'refreshToken');
     if (accessToken != null && refreshToken != null) {
@@ -41,11 +43,34 @@ class _LoadScreenState extends State<LoadScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        hasToken();
+    _handleInitialUri();
+  }
+
+  void _handleInitialUri() async {
+    try {
+      final uri = await _appLinks.getInitialLink();
+      final screen = uri?.queryParameters['screen'];
+      if (screen == 'medical_card') {
+        final accessToken = await secureStorage.read(key: 'accessToken');
+        final refreshToken = await secureStorage.read(key: 'refreshToken');
+        if (accessToken != null && refreshToken != null) {
+          await LoginRepository().refresh();
+          Navigator.push(
+            context,
+            CustomPageRoute(
+              routeName: '/medical_card',
+              beginOffset: Offset(0.0, 0.0),
+            ),
+          );
+          return;
+        } else {
+          hasToken();
+        }
       }
-    });
+    } catch (e) {
+      return;
+    }
+    hasToken();
   }
 
   @override
