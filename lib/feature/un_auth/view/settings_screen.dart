@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
+import 'package:hive/hive.dart';
+
+import '../../../model/model.dart';
+import '../../../repository/un_auth/settings_repository.dart';
 
 class UnAuthSettingsScreen extends StatefulWidget {
   const UnAuthSettingsScreen({super.key});
@@ -12,6 +16,37 @@ class UnAuthSettingsScreen extends StatefulWidget {
 
 class _UnAuthSettingsScreenState extends State<UnAuthSettingsScreen> {
   bool toggleOn = true;
+
+  Future<void> toggleNotification() async {
+    final result = await SettingsRepository().toggleNotification();
+    if (result == 1 || result == 0) {
+      setState(() {
+        toggleOn = result == 1;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Не удалось переключить уведомления',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final box = Hive.box<Settings>('unAuthSettingsBox');
+    toggleOn = box.get('settings')?.notification ?? true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +100,7 @@ class _UnAuthSettingsScreenState extends State<UnAuthSettingsScreen> {
                                 ),
                               ),
                               child: TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    toggleOn = !toggleOn;
-                                  });
-                                },
+                                onPressed: toggleNotification,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

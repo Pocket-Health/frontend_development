@@ -3,6 +3,9 @@ import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/router/CustomPageRoute.dart';
 
+import '../../../model/model.dart';
+import '../../../repository/un_auth/un_auth_repository.dart';
+
 class UnAuthAddMedicationScheduleScreen extends StatefulWidget {
   const UnAuthAddMedicationScheduleScreen({super.key});
 
@@ -13,10 +16,50 @@ class UnAuthAddMedicationScheduleScreen extends StatefulWidget {
 
 class _UnAuthAddMedicationScheduleScreenState
     extends State<UnAuthAddMedicationScheduleScreen> {
-  final List<String> _DaysOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
+  final TextEditingController _medicationNameController = TextEditingController();
+  final List<String> _daysOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
   Set<String> _selectedDaysOfWeek = {};
 
   List<TimeOfDay> _selectedTimes = [];
+
+  Future<void> addSchedule() async {
+    if (_medicationNameController.text.isEmpty ||
+        _selectedDaysOfWeek.isEmpty ||
+        _selectedTimes.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            textAlign: TextAlign.center,
+            'Заполните все поля',
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+    final medicationSchedule = MedicationSchedule(
+      id: '',
+      medicationName: _medicationNameController.text,
+      scheduledDays:
+      _selectedDaysOfWeek.map((day) => _daysOfWeek.indexOf(day)).toList(),
+      scheduledTimes:
+      _selectedTimes
+          .map((time) => '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}')
+          .toList(),
+    );
+    await MedicationScheduleRepository().addMedicationSchedule(medicationSchedule);
+    Navigator.push(
+      context,
+      CustomPageRoute(
+        routeName: '/un_auth_medication_schedule',
+        beginOffset: Offset(-1.0, 0.0),
+      ),
+    );
+  }
 
   void __showDaysOfWeekDialog(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -44,7 +87,7 @@ class _UnAuthAddMedicationScheduleScreenState
                     mainAxisSpacing: 10,
                     childAspectRatio: 2.2,
                     children:
-                        _DaysOfWeek.map((day) {
+                        _daysOfWeek.map((day) {
                           final isSelected = _selectedDaysOfWeek.contains(day);
                           return GestureDetector(
                             onTap: () {
@@ -147,45 +190,48 @@ class _UnAuthAddMedicationScheduleScreenState
                       Wrap(
                         spacing: 10,
                         runSpacing: 10,
-                        children: _selectedTimes.map((time) {
-                          final isSelected = true;
-                          final formatted = time.format(context);
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedTimes.remove(time);
-                              });
-                              setLocalState(() {});
-                            },
-                            child: AnimatedContainer(
-                              duration: Duration(milliseconds: 200),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 16),
-                              decoration: ShapeDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment(-0.05, -1.5),
-                                  end: Alignment(0.05, 2.5),
-                                  colors: [
-                                    Color(0xFF34C8E8),
-                                    Color(0xFF4E4AF2),
-                                  ],
+                        children:
+                            _selectedTimes.map((time) {
+                              final isSelected = true;
+                              final formatted = time.format(context);
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedTimes.remove(time);
+                                  });
+                                  setLocalState(() {});
+                                },
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 200),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 16,
+                                  ),
+                                  decoration: ShapeDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment(-0.05, -1.5),
+                                      end: Alignment(0.05, 2.5),
+                                      colors: [
+                                        Color(0xFF34C8E8),
+                                        Color(0xFF4E4AF2),
+                                      ],
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    formatted,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: Text(
-                                formatted,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                              );
+                            }).toList(),
                       ),
                       const SizedBox(height: 20),
                       Row(
@@ -224,10 +270,7 @@ class _UnAuthAddMedicationScheduleScreenState
                           gradient: LinearGradient(
                             begin: Alignment(-0.05, -1.5),
                             end: Alignment(0.05, 2.5),
-                            colors: [
-                              Color(0xFF34C8E8),
-                              Color(0xFF4E4AF2),
-                            ],
+                            colors: [Color(0xFF34C8E8), Color(0xFF4E4AF2)],
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -267,7 +310,6 @@ class _UnAuthAddMedicationScheduleScreenState
       },
     );
   }
-
 
   Widget _buildTimePickerItem({
     required int count,
@@ -412,6 +454,7 @@ class _UnAuthAddMedicationScheduleScreenState
                                           ),
                                         ),
                                         TextField(
+                                          controller: _medicationNameController,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.text,
                                           decoration: InputDecoration(
@@ -423,7 +466,7 @@ class _UnAuthAddMedicationScheduleScreenState
                                                 ).labelMedium,
                                           ),
                                           style:
-                                              TextTheme.of(context).labelSmall,
+                                              TextTheme.of(context).labelMedium,
                                         ),
                                       ],
                                     ),
@@ -578,15 +621,7 @@ class _UnAuthAddMedicationScheduleScreenState
                                       ],
                                     ),
                                     child: TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          CustomPageRoute(
-                                            routeName: '/un_auth_medication_schedule',
-                                            beginOffset: Offset(1.0, 0.0),
-                                          ),
-                                        );
-                                      },
+                                      onPressed: addSchedule,
                                       child: Text(
                                         'Сохранить',
                                         style: TextStyle(
@@ -611,7 +646,7 @@ class _UnAuthAddMedicationScheduleScreenState
                                       Navigator.push(
                                         context,
                                         CustomPageRoute(
-                                          routeName: '/un_auth_medication_schedule',
+                                          routeName: '/medication_schedule',
                                           beginOffset: Offset(-1.0, 0.0),
                                         ),
                                       );

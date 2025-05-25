@@ -6,9 +6,10 @@
     android:minWidth="110dp"
     android:minHeight="50dp"
 
-    android:maxWidth="110dp"
-    android:maxHeight="50dp"
+    android:maxWidth="150dp"
+    android:maxHeight="110dp"
 
     android:previewImage="@drawable/sos"
+    android:resizeMode="vertical|horizontal"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen" />
