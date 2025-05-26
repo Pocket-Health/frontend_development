@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:frontend_development/model/medication_schedule_list.dart';
 import 'package:frontend_development/pocket_health_app.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:frontend_development/repository/un_auth/un_auth_repository.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'model/model.dart';
@@ -11,9 +11,7 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await Hive.initFlutter();
 
@@ -29,6 +27,13 @@ Future<void> main() async {
   Hive.registerAdapter(MedicationScheduleAdapter());
   Hive.registerAdapter(MedicationScheduleListAdapter());
   await Hive.openBox<MedicationScheduleList>('medicationScheduleListBox');
+
+  await Hive.openBox<Settings>('unAuthSettingsBox');
+  if (Hive.box<Settings>('unAuthSettingsBox').get('settings') == null) {
+    SettingsRepository().initSettings();
+  }
+
+  await Hive.openBox<MedicationScheduleList>('unAuthMedicationScheduleListBox');
 
   runApp(const PocketHealthApp());
 }

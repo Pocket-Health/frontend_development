@@ -85,7 +85,7 @@ class CustomPageRoute<T> extends PageRouteBuilder<T> {
       case '/un_auth_add_medication_schedule':
         return const UnAuthAddMedicationScheduleScreen();
       case '/un_auth_edit_medication_schedule':
-        return const UnAuthEditMedicationScheduleScreen();
+        return UnAuthEditMedicationScheduleScreen(medicationSchedule: arguments as MedicationSchedule);
       case '/un_auth_settings':
         return const UnAuthSettingsScreen();
       default:

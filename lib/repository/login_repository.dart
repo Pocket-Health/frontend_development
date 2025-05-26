@@ -37,6 +37,7 @@ class LoginRepository {
     await MedicalCardRepository().getMedicalCard();
     await ChatRepository().getChatHistory();
     await MedicationScheduleRepository().getMedicationSchedule();
+    await SettingsRepository().getSettings();
   }
 
   Future refresh() async {

@@ -10,7 +10,7 @@ class SettingsRepository {
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<int> getSettings() async {
-    final url = dotenv.env['CHAT_HISTORY_URL'].toString();
+    final url = dotenv.env['SETTINGS_URL'].toString();
     final String? accessToken = await _secureStorage.read(key: 'accessToken');
     try {
       final response = await _dio.get(
