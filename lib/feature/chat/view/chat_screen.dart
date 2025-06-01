@@ -74,8 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
     } else {
       AppMetrica.reportError(message: 'error_get_answer: $responseCode');
       setState(() {
-        messages[0]['message2']['text'] =
-        'Ошибка при получении ответа';
+        messages[0]['message2']['text'] = 'Ошибка при получении ответа';
       });
     }
   }
@@ -86,6 +85,44 @@ class _ChatScreenState extends State<ChatScreen> {
     final inputFieldWidth = screenSize.width * 0.9;
     final iconHeight = 80.0;
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 60,
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          width: screenSize.width,
+          height: 130,
+          decoration: ShapeDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(0, 1.5),
+              end: Alignment(0, -1),
+              colors: [Color(0xFF363E51), Color(0xFF181C24)],
+            ),
+            shape: Border(
+              bottom: BorderSide(
+                width: 1,
+                color: Colors.white10,
+                strokeAlign: BorderSide.strokeAlignInside,
+              ),
+            ),
+          ),
+          child: Container(
+            padding: EdgeInsets.only(top: 50),
+            child: Text(
+              textAlign: TextAlign.center,
+              'Ответы сгенерированны ИИ.\n'
+                  'Рекомендуем обратиться к специалисту.',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -226,7 +263,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                               minLines: 1,
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
-                                                hintText: 'Введите ваш вопрос',
+                                                hintText:
+                                                    'Введите ваши симптомы',
                                                 hintStyle:
                                                     Theme.of(
                                                       context,
