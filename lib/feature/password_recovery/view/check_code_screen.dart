@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,6 +43,8 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
       return;
     }
 
+    AppMetrica.reportEvent('check_code');
+
     final passwordRecoveryRepository = PasswordRecoveryRepository();
     int responseCode = await passwordRecoveryRepository.checkCode(
       email: email,
@@ -49,6 +52,7 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
     );
 
     if (responseCode == 200) {
+      AppMetrica.reportEvent('success_check_code');
       Navigator.push(
         context,
         CustomPageRoute(
@@ -58,6 +62,7 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
         ),
       );
     } else if (responseCode == 400) {
+      AppMetrica.reportError(message: 'error_check_code: $responseCode invalid code');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -73,6 +78,7 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
         ),
       );
     } else {
+      AppMetrica.reportError(message: 'error_check_code: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -93,6 +99,7 @@ class _CheckCodeScreen extends State<CheckCodeScreen> {
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_check_code_screen');
     _emailController.text = widget.email;
   }
 

@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_development/feature/medical_card/widget/widget.dart';
@@ -23,6 +24,8 @@ class _MedicalCardScreenState extends State<MedicalCardScreen> {
 
   @override
   void initState() {
+    AppMetrica.reportEvent('open_medical_card_screen');
+
     final box = Hive.box<MedicalCard>('medicalCardBox');
     final medicalCard = box.get('medicalCard');
 

@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,6 +31,8 @@ class _UnAuthEditMedicationScheduleScreenState
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_un_auth_edit_medication_schedule_screen');
+
     _medicationNameController.text = widget.medicationSchedule.medicationName;
 
     _selectedDaysOfWeek =
@@ -72,6 +75,7 @@ class _UnAuthEditMedicationScheduleScreenState
         ),
       );
     }
+    AppMetrica.reportEvent('un_auth_edit_schedule');
     final medicationSchedule = MedicationSchedule(
       id: widget.medicationSchedule.id,
       medicationName: _medicationNameController.text,
@@ -672,7 +676,7 @@ class _UnAuthEditMedicationScheduleScreenState
                                       Navigator.push(
                                         context,
                                         CustomPageRoute(
-                                          routeName: '/medication_schedule',
+                                          routeName: '/un_auth_medication_schedule',
                                           beginOffset: Offset(-1.0, 0.0),
                                         ),
                                       );

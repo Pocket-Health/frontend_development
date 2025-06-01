@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,12 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool passwordVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    AppMetrica.reportEvent('open_registration_user_screen');
+  }
 
   @override
   void dispose() {
@@ -45,10 +52,13 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
       return;
     }
 
+    AppMetrica.reportEvent('check_email_for_registration');
+
     final registrationRepository = RegistrationRepository();
     int responseCode = await registrationRepository.checkEmail(email: email, password: password);
 
     if (responseCode == 200) {
+      AppMetrica.reportEvent('email_available_for_registration');
       Navigator.push(
         context,
         CustomPageRoute(
@@ -61,6 +71,7 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
         ),
       );
     } else if (responseCode == 409) {
+      AppMetrica.reportError(message: 'error_registration: $responseCode email already registered');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -77,6 +88,7 @@ class _RegistrationUserScreenState extends State<RegistrationUserScreen> {
       );
       return;
     } else {
+      AppMetrica.reportError(message: 'error_registration: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,

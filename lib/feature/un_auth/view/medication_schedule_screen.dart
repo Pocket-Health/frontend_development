@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,6 +20,7 @@ class _UnAuthMedicationScheduleScreenState extends State<UnAuthMedicationSchedul
   late MedicationScheduleList medicationScheduleList;
 
   Future<void> _deleteSchedule(String id) async {
+    AppMetrica.reportEvent('un_auth_delete_schedule');
     await MedicationScheduleRepository().deleteMedicationSchedule(id);
     setState(() {
       final box = Hive.box<MedicationScheduleList>('UnAuthMedicationScheduleListBox');
@@ -29,6 +31,7 @@ class _UnAuthMedicationScheduleScreenState extends State<UnAuthMedicationSchedul
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_un_auth_medication_schedule_screen');
     final box = Hive.box<MedicationScheduleList>('UnAuthMedicationScheduleListBox');
     medicationScheduleList = box.get('medicationScheduleList') ?? MedicationScheduleList(schedules: []);
   }

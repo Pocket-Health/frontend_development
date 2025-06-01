@@ -74,7 +74,7 @@ class MedicationScheduleRepository {
   }
 
   Future<int> editMedicationSchedule(MedicationSchedule medicationSchedule) async {
-    final url = dotenv.env['EDIT_MEDICATION_SCHEDULE_URL'].toString() + '${medicationSchedule.id}';
+    final url = dotenv.env['EDIT_MEDICATION_SCHEDULE_URL'].toString() + '/${medicationSchedule.id}';
     final String? accessToken = await _secureStorage.read(key: 'accessToken');
     print(medicationSchedule.toJson());
     try {
@@ -101,7 +101,7 @@ class MedicationScheduleRepository {
   }
 
   Future<int> deleteMedicationSchedule(String id) async {
-    final url = dotenv.env['DELETE_MEDICATION_SCHEDULE_URL'].toString() + '$id';
+    final url = dotenv.env['DELETE_MEDICATION_SCHEDULE_URL'].toString() + '/$id';
     final String? accessToken = await _secureStorage.read(key: 'accessToken');
     try {
       final response = await _dio.delete(

@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,6 +44,8 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
       return;
     }
 
+    AppMetrica.reportEvent('password_recovery');
+
     final passwordRecoveryRepository = PasswordRecoveryRepository();
     int responseCode = await passwordRecoveryRepository.passwordRecovery(
       email: email,
@@ -50,11 +53,13 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
     );
 
     if (responseCode == 200) {
+      AppMetrica.reportEvent('success_password_recovery');
       Navigator.push(
         context,
         CustomPageRoute(routeName: '/login', beginOffset: Offset(1.0, 0.0)),
       );
     } else if (responseCode == 403) {
+      AppMetrica.reportEvent('error_password_recovery: $responseCode invalid_data');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -70,6 +75,7 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
         ),
       );
     } else {
+      AppMetrica.reportError(message: 'error_password_recovery: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -90,6 +96,7 @@ class _NewPasswordScreen extends State<NewPasswordScreen> {
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_new_password_screen');
     _emailController.text = widget.email;
   }
 

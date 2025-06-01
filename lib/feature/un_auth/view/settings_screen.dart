@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,12 +19,15 @@ class _UnAuthSettingsScreenState extends State<UnAuthSettingsScreen> {
   bool toggleOn = true;
 
   Future<void> toggleNotification() async {
+    AppMetrica.reportEvent('un_auth_toggle_notification');
     final result = await SettingsRepository().toggleNotification();
     if (result == 1 || result == 0) {
+      AppMetrica.reportEvent('success_un_auth_toggle_notification');
       setState(() {
         toggleOn = result == 1;
       });
     } else {
+      AppMetrica.reportEvent('error_un_auth_toggle_notification');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -44,6 +48,7 @@ class _UnAuthSettingsScreenState extends State<UnAuthSettingsScreen> {
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_un_auth_settings_screen');
     final box = Hive.box<Settings>('unAuthSettingsBox');
     toggleOn = box.get('settings')?.notification ?? true;
   }
