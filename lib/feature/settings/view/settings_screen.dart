@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,13 +19,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool toggleOn = true;
 
   void toggleNotification() async {
+    AppMetrica.reportEvent('toggle_notification');
     if (toggleOn) {
       final responseCode = await SettingsRepository().disableNotification();
       if (responseCode == 200) {
+        AppMetrica.reportEvent('success_disable_notification');
         setState(() {
           toggleOn = false;
         });
       } else {
+        AppMetrica.reportError(message: 'error_disable_notification: $responseCode');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.white,
@@ -43,10 +47,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       final responseCode = await SettingsRepository().enableNotification();
       if (responseCode == 200) {
+        AppMetrica.reportEvent('success_enable_notification');
         setState(() {
           toggleOn = true;
         });
       } else {
+        AppMetrica.reportError(message: 'error_enable_notification: $responseCode');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.white,
@@ -68,6 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_settings_screen');
     final box = Hive.box<Settings>('settingsBox');
     toggleOn = box.get('settings')?.notification ?? true;
   }

@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,6 +42,9 @@ class _UnAuthAddMedicationScheduleScreenState
         ),
       );
     }
+
+    AppMetrica.reportEvent('un_auth_add_schedule');
+
     final medicationSchedule = MedicationSchedule(
       id: '',
       medicationName: _medicationNameController.text,
@@ -353,6 +357,7 @@ class _UnAuthAddMedicationScheduleScreenState
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_un_auth_add_medication_schedule_screen');
   }
 
   @override
@@ -646,7 +651,7 @@ class _UnAuthAddMedicationScheduleScreenState
                                       Navigator.push(
                                         context,
                                         CustomPageRoute(
-                                          routeName: '/medication_schedule',
+                                          routeName: '/un_auth_medication_schedule',
                                           beginOffset: Offset(-1.0, 0.0),
                                         ),
                                       );

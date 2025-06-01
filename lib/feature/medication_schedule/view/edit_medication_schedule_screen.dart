@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,6 +31,8 @@ class _EditMedicationScheduleScreenState
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_edit_medication_schedule_screen');
+
     _medicationNameController.text = widget.medicationSchedule.medicationName;
 
     _selectedDaysOfWeek =
@@ -72,6 +75,7 @@ class _EditMedicationScheduleScreenState
         ),
       );
     }
+    AppMetrica.reportEvent('edit_medication_schedule');
     final medicationSchedule = MedicationSchedule(
       id: widget.medicationSchedule.id,
       medicationName: _medicationNameController.text,
@@ -86,6 +90,7 @@ class _EditMedicationScheduleScreenState
       medicationSchedule,
     );
     if (responseCode == 200) {
+      AppMetrica.reportEvent('success_edit_medication_schedule');
       Navigator.push(
         context,
         CustomPageRoute(
@@ -94,6 +99,7 @@ class _EditMedicationScheduleScreenState
         ),
       );
     } else if (responseCode == 404) {
+      AppMetrica.reportError(message: 'error_edit_medication_schedule: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -109,6 +115,7 @@ class _EditMedicationScheduleScreenState
         ),
       );
     } else {
+      AppMetrica.reportError(message: 'error_edit_medication_schedule: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,29 +12,11 @@ class UnAuthMedicalCardScreen extends StatefulWidget {
 }
 
 class _UnAuthMedicalCardScreenState extends State<UnAuthMedicalCardScreen> {
-  final TextEditingController _fullnameController = TextEditingController(
-    text: 'Иванов Иван Иванович',
-  );
-
-  final TextEditingController _heightController = TextEditingController(
-    text: '175 см',
-  );
-
-  final TextEditingController _weightController = TextEditingController(
-    text: '75 кг',
-  );
-
-  final TextEditingController _bloodTypeController = TextEditingController(
-    text: 'IV-',
-  );
-
-  final TextEditingController _allergiesController = TextEditingController(
-    text: '',
-  );
-
-  final TextEditingController _diseasesController = TextEditingController(
-    text: '',
-  );
+  @override
+  void initState() {
+    super.initState();
+    AppMetrica.reportEvent('open_un_auth_medical_card_screen');
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,6 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_chat_screen');
     final box = Hive.box<ChatHistory>('chatHistoryBox');
     messages = box.get('chatHistory')?.messages.reversed.toList() ?? [];
   }
@@ -47,6 +49,8 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
 
+    AppMetrica.reportEvent('send_question');
+
     setState(() {
       messages.insert(0, {
         'message': {'text': question},
@@ -62,11 +66,13 @@ class _ChatScreenState extends State<ChatScreen> {
     final box = Hive.box<ChatHistory>('chatHistoryBox');
 
     if (responseCode == 200) {
+      AppMetrica.reportEvent('get_answer');
       final updatedMessages = box.get('chatHistory')?.messages ?? [];
       setState(() {
         messages = updatedMessages.reversed.toList();
       });
     } else {
+      AppMetrica.reportError(message: 'error_get_answer: $responseCode');
       setState(() {
         messages[0]['message2']['text'] =
         'Ошибка при получении ответа';

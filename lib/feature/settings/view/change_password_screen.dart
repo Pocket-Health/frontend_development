@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -79,10 +80,13 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
       return;
     }
 
+    AppMetrica.reportEvent('change_password');
+
     final settingsRepository = SettingsRepository();
     int responseCode = await settingsRepository.changePassword(oldPassword, newPassword);
 
     if (responseCode == 200) {
+      AppMetrica.reportEvent('success_change_password');
       Navigator.push(
         context,
         CustomPageRoute(
@@ -91,6 +95,7 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
         ),
       );
     } else if (responseCode == 400) {
+      AppMetrica.reportError(message: 'error_change_password: $responseCode wrong old password');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -107,6 +112,7 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
       );
       return;
     } else {
+      AppMetrica.reportError(message: 'error_change_password: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -123,6 +129,12 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
       );
       return;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    AppMetrica.reportEvent('open_change_password_screen');
   }
 
   @override

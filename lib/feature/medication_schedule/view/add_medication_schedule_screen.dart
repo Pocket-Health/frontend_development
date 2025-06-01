@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,6 +42,7 @@ class _AddMedicationScheduleScreenState
         ),
       );
     }
+    AppMetrica.reportEvent('add_schedule');
     final medicationSchedule = MedicationSchedule(
       id: '',
       medicationName: _medicationNameController.text,
@@ -55,6 +57,7 @@ class _AddMedicationScheduleScreenState
       medicationSchedule,
     );
     if (responseCode == 201) {
+      AppMetrica.reportEvent('success_add_schedule_success');
       Navigator.push(
         context,
         CustomPageRoute(
@@ -63,6 +66,7 @@ class _AddMedicationScheduleScreenState
         ),
       );
     } else if (responseCode == 404) {
+      AppMetrica.reportError(message: 'error_add_schedule: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -78,6 +82,7 @@ class _AddMedicationScheduleScreenState
         ),
       );
     } else {
+      AppMetrica.reportError(message: 'error_add_schedule: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -387,6 +392,7 @@ class _AddMedicationScheduleScreenState
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_add_medication_schedule_screen');
   }
 
   @override

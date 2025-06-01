@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -55,6 +56,8 @@ class _RegistrationMedicalCardScreenState
       return;
     }
 
+    AppMetrica.reportEvent('registration_medical_card');
+
     final registrationRepository = RegistrationRepository();
     String bloodType;
     switch (_bloodTypeController.text) {
@@ -98,11 +101,13 @@ class _RegistrationMedicalCardScreenState
     );
 
     if (responseCode == 201) {
+      AppMetrica.reportEvent('success_registration_medical_card');
       Navigator.push(
         context,
         CustomPageRoute(routeName: '/login', beginOffset: Offset(1.0, 0.0)),
       );
     } else {
+      AppMetrica.reportError(message: 'error_registration_medical_card: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -205,6 +210,7 @@ class _RegistrationMedicalCardScreenState
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_registration_medical_card_screen');
     _emailController.text = widget.email;
     _passwordController.text = widget.password;
     _bloodTypeController.text = 'Группа крови';

@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,13 +20,16 @@ class _MedicationScheduleScreenState extends State<MedicationScheduleScreen>{
   late MedicationScheduleList medicationScheduleList;
 
   Future<void> _deleteSchedule(String id) async {
+    AppMetrica.reportEvent('delete_schedule');
     final responseCode = await MedicationScheduleRepository().deleteMedicationSchedule(id);
     if (responseCode == 204) {
+      AppMetrica.reportEvent('success_delete_schedule');
       setState(() {
         final box = Hive.box<MedicationScheduleList>('medicationScheduleListBox');
         medicationScheduleList = box.get('medicationScheduleList') ?? MedicationScheduleList(schedules: []);
       });
     } else if (responseCode == 404) {
+      AppMetrica.reportError(message: 'error_delete_schedule: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -41,6 +45,7 @@ class _MedicationScheduleScreenState extends State<MedicationScheduleScreen>{
         ),
       );
     } else {
+      AppMetrica.reportError(message: 'error_delete_schedule: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -61,6 +66,7 @@ class _MedicationScheduleScreenState extends State<MedicationScheduleScreen>{
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_medication_schedule_screen');
     final box = Hive.box<MedicationScheduleList>('medicationScheduleListBox');
     medicationScheduleList = box.get('medicationScheduleList') ?? MedicationScheduleList(schedules: []);
   }

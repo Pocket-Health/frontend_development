@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,6 +44,9 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
       );
       return;
     }
+
+    AppMetrica.reportEvent('edit_medical_card');
+
     String bloodType;
     switch (_selectedBloodType) {
       case 'I Rh+':
@@ -82,6 +86,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
     );
     int responseCode = await MedicalCardRepository().editMedicalCard(medicalCard);
     if (responseCode == 200) {
+      AppMetrica.reportEvent('success_edit_medical_card');
       Navigator.push(
         context,
         CustomPageRoute(
@@ -90,6 +95,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
         ),
       );
     } else {
+      AppMetrica.reportError(message: 'error_edit_medical_card: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -191,6 +197,7 @@ class _EditMedicalCardScreenState extends State<EditMedicalCardScreen> {
   @override
   void initState() {
     super.initState();
+    AppMetrica.reportEvent('open_edit_medical_card_screen');
     final box = Hive.box<MedicalCard>('medicalCardBox');
     MedicalCard? medicalCard = box.get('medicalCard');
     _fullNameController.text = medicalCard?.fullName ?? '';

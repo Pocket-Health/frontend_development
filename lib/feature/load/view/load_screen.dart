@@ -1,4 +1,5 @@
 import 'package:app_links/app_links.dart';
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,6 +52,7 @@ class _LoadScreenState extends State<LoadScreen> {
       final uri = await _appLinks.getInitialLink();
       final screen = uri?.queryParameters['screen'];
       if (screen == 'medical_card') {
+        AppMetrica.reportEvent('used_sos_widget');
         final accessToken = await secureStorage.read(key: 'accessToken');
         final refreshToken = await secureStorage.read(key: 'refreshToken');
         if (accessToken != null && refreshToken != null) {

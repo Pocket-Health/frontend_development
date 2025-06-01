@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +12,13 @@ class UnAuthChatScreen extends StatefulWidget {
 }
 
 class _UnAuthChatScreenState extends State<UnAuthChatScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    AppMetrica.reportEvent('open_un_auth_chat_screen');
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;

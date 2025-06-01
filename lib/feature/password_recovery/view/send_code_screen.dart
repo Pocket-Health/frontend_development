@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,15 +39,19 @@ class _SendCodeScreen extends State<SendCodeScreen> {
       return;
     }
 
+    AppMetrica.reportEvent('send_code');
+
     final passwordRecoveryRepository = PasswordRecoveryRepository();
     int responseCode = await passwordRecoveryRepository.sendCode(email: email);
 
     if (responseCode == 200) {
+      AppMetrica.reportEvent('success_send_code');
       Navigator.push(
         context,
         CustomPageRoute(routeName: '/check_code', beginOffset: Offset(1.0, 0.0), arguments: {'email': email}),
       );
     }else if (responseCode == 403) {
+      AppMetrica.reportEvent('error_send_code: $responseCode user not found');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -62,6 +67,7 @@ class _SendCodeScreen extends State<SendCodeScreen> {
         ),
       );
     } else {
+      AppMetrica.reportEvent('error_send_code: $responseCode');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.white,
@@ -78,6 +84,12 @@ class _SendCodeScreen extends State<SendCodeScreen> {
       );
       return;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    AppMetrica.reportEvent('open_send_code_screen');
   }
 
   @override
