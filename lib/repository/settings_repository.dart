@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 
 import '../model/model.dart';
+import '../service/service.dart';
 
 class SettingsRepository {
   final Dio _dio = Dio();
@@ -39,7 +40,7 @@ class SettingsRepository {
     final url = dotenv.env['ENABLE_NOTIFICATION_URL'].toString();
     final String? accessToken = await _secureStorage.read(key: 'accessToken');
     try {
-      final response = await _dio.get(
+      final response = await _dio.post(
         url,
         options: Options(
           headers: {
@@ -54,6 +55,7 @@ class SettingsRepository {
         final settings = box.get('settings');
         settings?.notification = true;
         await box.put('settings', settings!);
+        await NotificationService().scheduleAllNotifications();
         return 200;
       }
     } catch (e) {
@@ -66,7 +68,7 @@ class SettingsRepository {
     final url = dotenv.env['DISABLE_NOTIFICATION_URL'].toString();
     final String? accessToken = await _secureStorage.read(key: 'accessToken');
     try {
-      final response = await _dio.get(
+      final response = await _dio.post(
         url,
         options: Options(
           headers: {
@@ -81,6 +83,7 @@ class SettingsRepository {
         final settings = box.get('settings');
         settings?.notification = false;
         await box.put('settings', settings!);
+        await NotificationService().cancelAllNotifications();
         return 200;
       }
     } catch (e) {
@@ -121,5 +124,6 @@ class SettingsRepository {
   Future logout() async {
     await _secureStorage.delete(key: 'accessToken');
     await _secureStorage.delete(key: 'refreshToken');
+    await NotificationService().cancelAllNotifications();
   }
 }

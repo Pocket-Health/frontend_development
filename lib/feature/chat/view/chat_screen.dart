@@ -169,7 +169,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: ChatBubble(
-                                text: answer,
+                                text: answer.toString().replaceAll('\\n', ''),
                                 color: Color(0xFF4E4AF2),
                               ),
                             ),
@@ -264,7 +264,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
                                                 hintText:
-                                                    'Введите ваши симптомы',
+                                                    'Введите симптомы',
                                                 hintStyle:
                                                     Theme.of(
                                                       context,

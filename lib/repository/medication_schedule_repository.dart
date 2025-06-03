@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend_development/service/service.dart';
 import 'package:hive/hive.dart';
 
 import '../model/model.dart';
@@ -38,6 +39,7 @@ class MedicationScheduleRepository {
             );
         final box = Hive.box<MedicationScheduleList>('medicationScheduleListBox');
         await box.put('medicationScheduleList', medicationScheduleList);
+        await NotificationService().scheduleAllNotifications();
         return 200;
       }
     } catch (e) {

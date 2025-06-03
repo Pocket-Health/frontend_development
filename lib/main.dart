@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:frontend_development/pocket_health_app.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend_development/repository/un_auth/un_auth_repository.dart';
+import 'package:frontend_development/service/service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'model/model.dart';
@@ -37,6 +38,8 @@ Future<void> main() async {
   await Hive.openBox<MedicationScheduleList>('unAuthMedicationScheduleListBox');
 
   AppMetrica.activate(AppMetricaConfig(dotenv.env['APP_METRICS_API_KEY'].toString(), sessionsAutoTrackingEnabled: true));
+
+  await NotificationService().initNotification();
 
   runApp(const PocketHealthApp());
 }
