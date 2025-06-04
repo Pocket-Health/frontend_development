@@ -189,9 +189,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  setState(() {
-                                    toggleOn = !toggleOn;
-                                  });
+                                  toggleNotification();
                                 },
                                 child: Row(
                                   mainAxisAlignment:

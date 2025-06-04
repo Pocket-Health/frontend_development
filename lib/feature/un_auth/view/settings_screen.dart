@@ -24,7 +24,7 @@ class _UnAuthSettingsScreenState extends State<UnAuthSettingsScreen> {
     if (result == 1 || result == 0) {
       AppMetrica.reportEvent('success_un_auth_toggle_notification');
       setState(() {
-        toggleOn = result == 1;
+        Hive.box<Settings>('unAuthSettingsBox').get('settings')?.notification == true ? toggleOn = true : toggleOn = false;
       });
     } else {
       AppMetrica.reportEvent('error_un_auth_toggle_notification');

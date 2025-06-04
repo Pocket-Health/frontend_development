@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 import '../../model/model.dart';
+import '../../service/service.dart';
 
 class SettingsRepository {
 
@@ -16,8 +17,10 @@ class SettingsRepository {
       settings.notification = !settings.notification;
       await box.put('settings', settings);
       if (settings.notification) {
+        await NotificationService().scheduleAllUnAuthNotifications();
         return 1;
       } else {
+        await NotificationService().cancelAllNotifications();
         return 0;
       }
     } else {
