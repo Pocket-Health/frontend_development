@@ -109,8 +109,7 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: EdgeInsets.only(top: 50),
             child: Text(
               textAlign: TextAlign.center,
-              'Ответы сгенерированны ИИ.\n'
-                  'Рекомендуем обратиться к специалисту.',
+              'Ответы не являются медицинской рекомендацией или диагнозом.',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
